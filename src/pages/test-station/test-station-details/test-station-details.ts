@@ -8,14 +8,14 @@ import {
 } from 'ionic-angular';
 import { AlertController } from 'ionic-angular';
 import { TestStationReferenceDataModel } from '../../../models/reference-data-models/test-station.model';
-import { APP_STRINGS, PAGE_NAMES, AUTH, FIREBASE_SCREEN_NAMES } from '../../../app/app.enums';
+import { APP_STRINGS, PAGE_NAMES, AUTH } from '../../../app/app.enums';
 import { VisitService } from '../../../providers/visit/visit.service';
 import { CallNumber } from '@ionic-native/call-number';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
-import { Firebase } from '@ionic-native/firebase';
+// import { Firebase } from '@ionic-native/firebase';
 import { Subscription } from 'rxjs';
-import { AuthService } from '../../../providers/global/auth.service';
-import { FirebaseLogsService } from '../../../providers/firebase-logs/firebase-logs.service';
+import { AuthenticationService } from '../../../providers/auth/authentication/authentication.service';
+// import { FirebaseLogsService } from '../../../providers/firebase-logs/firebase-logs.service';
 import { AppService } from '../../../providers/global/app.service';
 import { LogsProvider } from '../../../modules/logs/logs.service';
 
@@ -30,7 +30,6 @@ export class TestStationDetailsPage {
   nextAlert: boolean = false;
   isNextPageLoading: boolean = false;
   startVisitSubscription: Subscription;
-  oid: string;
 
   constructor(
     public navCtrl: NavController,
@@ -40,10 +39,10 @@ export class TestStationDetailsPage {
     private callNumber: CallNumber,
     private visitService: VisitService,
     private openNativeSettings: OpenNativeSettings,
-    private firebase: Firebase,
+    // private firebase: Firebase,
     private loadingCtrl: LoadingController,
-    private authService: AuthService,
-    private firebaseLogsService: FirebaseLogsService,
+    private authenticationService: AuthenticationService,
+    // private firebaseLogsService: FirebaseLogsService,
     private appService: AppService,
     private logProvider: LogsProvider
   ) {
@@ -51,7 +50,7 @@ export class TestStationDetailsPage {
   }
 
   ionViewDidEnter() {
-    this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.TEST_STATION_DETAILS);
+    // this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.TEST_STATION_DETAILS);
   }
 
   ionViewDidLoad() {
@@ -63,13 +62,14 @@ export class TestStationDetailsPage {
       content: 'Loading...'
     });
     this.isNextPageLoading = true;
-    this.oid = this.authService.getOid();
+
+    const { testerId } = this.authenticationService.tokenInfo;
     LOADING.present();
     this.startVisitSubscription = this.visitService.startVisit(this.testStation).subscribe(
       (data) => {
         this.logProvider.dispatchLog({
           type: 'info',
-          message: `${this.oid} - ${data.status} ${data.statusText} for API call to ${data.url}`,
+          message: `${testerId} - ${data.status} ${data.statusText} for API call to ${data.url}`,
           timestamp: Date.now()
         });
 
@@ -82,7 +82,7 @@ export class TestStationDetailsPage {
       (error) => {
         this.logProvider.dispatchLog({
           type: 'error-visitService.startVisit-confirmStartVisit in test-station-details.ts',
-          message: `${this.oid} - failed making a call to start a visit - ${JSON.stringify(
+          message: `${testerId} - failed making a call to start a visit - ${JSON.stringify(
             error
           )}`,
           timestamp: Date.now()
@@ -91,10 +91,10 @@ export class TestStationDetailsPage {
         this.isNextPageLoading = false;
         LOADING.dismiss();
 
-        this.firebase.logEvent('test_error', {
-          content_type: 'error',
-          item_id: 'Starting activity failed'
-        });
+        // this.firebase.logEvent('test_error', {
+        //   content_type: 'error',
+        //   item_id: 'Starting activity failed'
+        // });
 
         if (error && error.error === AUTH.INTERNET_REQUIRED) {
           const TRY_AGAIN_ALERT = this.alertCtrl.create({

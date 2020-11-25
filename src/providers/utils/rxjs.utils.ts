@@ -1,7 +1,8 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { _throw } from 'rxjs/observable/throw';
 import { timer } from 'rxjs/observable/timer';
-import { mergeMap } from 'rxjs/operators';
+import { mergeMap, tap } from 'rxjs/operators';
 
 export interface GenericRetryStrategyInterface {
   maxRetryAttempts?: number;
@@ -12,14 +13,15 @@ export interface GenericRetryStrategyInterface {
 export const genericRetryStrategy = ({
   maxRetryAttempts = 2,
   duration = 3000,
-  excludedStatusCodes = []
+  excludedStatusCodes = [0, 401, 404]
 }: GenericRetryStrategyInterface = {}) => (attempts: Observable<any>) => {
   return attempts.pipe(
-    mergeMap((error, i) => {
+    tap((_) => true),
+    mergeMap((error: HttpErrorResponse, i: number) => {
       const retryAttempt = i + 1;
       if (
         retryAttempt > maxRetryAttempts ||
-        excludedStatusCodes.find((e) => e === error.status)
+        excludedStatusCodes.some((e) => e === error.status)
       ) {
         return _throw(error);
       }

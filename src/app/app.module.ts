@@ -8,29 +8,22 @@ import { InAppBrowser } from '@ionic-native/in-app-browser';
 import { Camera } from '@ionic-native/camera';
 import { CallNumber } from '@ionic-native/call-number';
 import { MyApp } from './app.component';
-import { HTTPService } from '../providers/global/http.service';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { StorageService } from '../providers/natives/storage.service';
-import { AuthService } from '../providers/global/auth.service';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { WheelSelector } from '@ionic-native/wheel-selector';
 import { MobileAccessibility } from '@ionic-native/mobile-accessibility';
-import { SyncService } from '../providers/global/sync.service';
 import { PreparerService } from '../providers/preparer/preparer.service';
 import { VisitService } from '../providers/visit/visit.service';
-import { StateReformingService } from '../providers/global/state-reforming.service';
 import { CommonFunctionsService } from '../providers/utils/common-functions';
 import { Keyboard } from '@ionic-native/keyboard';
-import { MSAdal } from '@ionic-native/ms-adal';
-import { AuthInterceptor } from '../providers/interceptors/auth.interceptor';
 import { SignaturePadModule } from 'angular2-signaturepad';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
 import { SignaturePopoverComponent } from '../components/signature-popover/signature-popover';
 import { SignatureService } from '../providers/signature/signature.service';
-import { AppService } from '../providers/global/app.service';
 import { ActivityService } from '../providers/activity/activity.service';
-import { Firebase } from '@ionic-native/firebase';
+// import { Firebase } from '@ionic-native/firebase';
 import { LogsModule } from '../modules/logs/logs.module';
 import { DataStoreProvider } from '../modules/logs/data-store.service';
 import { Network } from '@ionic-native/network';
@@ -39,30 +32,46 @@ import { LogsProvider } from '../modules/logs/logs.service';
 import { SecureStorage } from '@ionic-native/secure-storage';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { FirebaseLogsService } from '../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsService } from '../providers/firebase-logs/firebase-logs.service';
 import { AppVersion } from '@ionic-native/app-version';
 import { SentryIonicErrorHandler } from './sentry-ionic-errorhandler';
+import {
+  AppAlertService,
+  AppService,
+  StateReformingService,
+  SyncService,
+  HTTPService
+} from '../providers/global';
 
-const IONIC_PROVIDERS = [
-  StatusBar,
-  SplashScreen,
-  // { provide: ErrorHandler, useClass: IonicErrorHandler }
-  { provide: ErrorHandler, useClass: SentryIonicErrorHandler }
-];
+import {
+  AuthenticationService,
+  VaultService,
+  BrowserAuthPlugin,
+  BrowserAuthService,
+  AuthInterceptorService,
+  UnauthInterceptor,
+  RetryInterceptor
+} from '../providers/auth';
+
+const IONIC_PROVIDERS = [StatusBar, SplashScreen];
 
 const CUSTOM_PROVIDERS = [
   AppService,
+  AppAlertService,
   SyncService,
   HTTPService,
   StorageService,
-  AuthService,
+  AuthenticationService,
+  VaultService,
+  BrowserAuthPlugin,
+  BrowserAuthService,
   PreparerService,
   VisitService,
   ActivityService,
   StateReformingService,
   CommonFunctionsService,
-  SignatureService,
-  FirebaseLogsService
+  SignatureService
+  // FirebaseLogsService
 ];
 
 const IONIC_NATIVE_PROVIDERS = [
@@ -75,14 +84,19 @@ const IONIC_NATIVE_PROVIDERS = [
   MobileAccessibility,
   AppVersion,
   Keyboard,
-  MSAdal,
   ScreenOrientation,
-  Firebase,
+  // Firebase,
   DataStoreProvider,
   Network,
   NetworkStateProvider,
   LogsProvider,
   SecureStorage
+];
+
+const INTERCEPTOR_PROVIDERS = [
+  { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: UnauthInterceptor, multi: true },
+  { provide: HTTP_INTERCEPTORS, useClass: RetryInterceptor, multi: true }
 ];
 
 @NgModule({
@@ -102,10 +116,12 @@ const IONIC_NATIVE_PROVIDERS = [
   bootstrap: [IonicApp],
   entryComponents: [MyApp, SignaturePopoverComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    ...INTERCEPTOR_PROVIDERS,
     ...IONIC_PROVIDERS,
     ...CUSTOM_PROVIDERS,
-    ...IONIC_NATIVE_PROVIDERS
+    ...IONIC_NATIVE_PROVIDERS,
+    // { provide: ErrorHandler, useClass: IonicErrorHandler }
+    { provide: ErrorHandler, useClass: SentryIonicErrorHandler }
   ]
 })
 export class AppModule {}

@@ -1,11 +1,11 @@
-import { StateReformingService } from "./state-reforming.service";
-import { TestBed } from "@angular/core/testing";
-import { StorageService } from "../natives/storage.service";
-import { AppService } from "./app.service";
-import { AppServiceMock } from "../../../test-config/services-mocks/app-service.mock";
-import { StorageServiceMock } from "../../../test-config/services-mocks/storage-service.mock";
+import { TestBed } from '@angular/core/testing';
+import { StorageService } from '../natives/storage.service';
+import { AppService } from './app.service';
+import { AppServiceMock } from '../../../test-config/services-mocks/app-service.mock';
+import { StorageServiceMock } from '../../../test-config/services-mocks/storage-service.mock';
+import { StateReformingService } from './state-reforming.service';
 
-describe("Provider: StateReformingService", () => {
+describe('Provider: StateReformingService', () => {
   let stateReformingService: StateReformingService;
   let storageService: StorageService;
   let appService: AppService;
@@ -14,8 +14,8 @@ describe("Provider: StateReformingService", () => {
       return 1;
     },
     getByIndex(i) {
-      return { name: "test" };
-    },
+      return { name: 'test' };
+    }
   };
 
   beforeEach(() => {
@@ -23,8 +23,8 @@ describe("Provider: StateReformingService", () => {
       providers: [
         StateReformingService,
         { provide: AppService, useClass: AppServiceMock },
-        { provide: StorageService, useClass: StorageServiceMock },
-      ],
+        { provide: StorageService, useClass: StorageServiceMock }
+      ]
     });
     stateReformingService = TestBed.get(StateReformingService);
     storageService = TestBed.get(StorageService);
@@ -37,30 +37,25 @@ describe("Provider: StateReformingService", () => {
     appService = null;
   });
 
-  it("should be created", () => {
+  it('should be created', () => {
     expect(stateReformingService).toBeTruthy();
   });
 
-  it("should update storage on saveNavStack action", () => {
-    spyOn(storageService, "update");
+  it('should update storage on saveNavStack action', () => {
+    spyOn(storageService, 'update');
     stateReformingService.saveNavStack(navMock);
     expect(appService.caching).toBeTruthy();
-    expect(storageService.update).toHaveBeenCalledWith(
-      "state",
-      '[{"page":"test"}]'
-    );
+    expect(storageService.update).toHaveBeenCalledWith('state', '[{"page":"test"}]');
   });
 
-  it("should update storage on onTestReview action", (done) => {
-    spyOn(storageService, "update");
-    const spy = spyOn(storageService, "read").and.returnValue(
-      Promise.resolve(true)
-    );
+  it('should update storage on onTestReview action', (done) => {
+    spyOn(storageService, 'update');
+    const spy = spyOn(storageService, 'read').and.returnValue(Promise.resolve(true));
     stateReformingService.onTestReview();
 
     spy.calls.mostRecent().returnValue.then((res) => {
       expect(res).toBe(true);
-      expect(storageService.update).toHaveBeenCalledWith("state", "true");
+      expect(storageService.update).toHaveBeenCalledWith('state', 'true');
       done();
     });
   });

@@ -1,25 +1,24 @@
 import { TestBed } from '@angular/core/testing';
 import { VisitService } from './visit.service';
+import { AlertControllerMock } from 'ionic-mocks';
 import { StorageService } from '../natives/storage.service';
+import { Events, AlertController, App } from 'ionic-angular';
 import { TestStationDataMock } from '../../assets/data-mocks/reference-data-mocks/test-station-data.mock';
 import { TestStationReferenceDataModel } from '../../models/reference-data-models/test-station.model';
 import { TestModel } from '../../models/tests/test.model';
 import { TestDataModelMock } from '../../assets/data-mocks/data-model/test-data-model.mock';
-import { AuthService } from '../global/auth.service';
 import { HTTPService } from '../global/http.service';
-import { Events, AlertController, App } from 'ionic-angular';
-import { AuthServiceMock } from '../../../test-config/services-mocks/auth-service.mock';
+import { AuthenticationService } from '../auth';
 import { AppService } from '../global/app.service';
 import { AppServiceMock } from '../../../test-config/services-mocks/app-service.mock';
 import { ActivityService } from '../activity/activity.service';
 import { ActivityServiceMock } from '../../../test-config/services-mocks/activity-service.mock';
-import { AlertControllerMock } from '../../../node_modules/ionic-mocks';
+import { AuthenticationServiceMock } from './../../../test-config/services-mocks/authentication-service.mock';
 
 describe('Provider: VisitService', () => {
   let visitService: VisitService;
   let appService: AppService;
   let storageService: StorageService;
-  let authService: AuthService;
   let storageServiceSpy: any;
   let httpService: HTTPService;
   let httpServiceSpy;
@@ -33,7 +32,9 @@ describe('Provider: VisitService', () => {
     storageServiceSpy = jasmine.createSpyObj('StorageService', ['update', 'delete']);
     httpServiceSpy = jasmine.createSpyObj('HTTPService', ['startVisit', 'endVisit']);
     appSpy = jasmine.createSpy('App', () => {
-      setRoot: () => { return new Promise(null)}
+      setRoot: () => {
+        return new Promise(null);
+      };
     });
 
     TestBed.configureTestingModule({
@@ -42,26 +43,26 @@ describe('Provider: VisitService', () => {
         VisitService,
         { provide: ActivityService, useClass: ActivityServiceMock },
         { provide: AppService, useClass: AppServiceMock },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: StorageService, useValue: storageServiceSpy },
         { provide: HTTPService, useValue: httpServiceSpy },
         { provide: AlertController, useFactory: () => AlertControllerMock.instance() },
-        { provide: App, useValue: appSpy },
+        { provide: App, useValue: appSpy }
       ]
     });
+
     visitService = TestBed.get(VisitService);
     appService = TestBed.get(AppService);
-    authService = TestBed.get(AuthService);
     storageService = TestBed.get(StorageService);
     httpService = TestBed.get(HTTPService);
     activityService = TestBed.get(ActivityService);
-    appService.caching = true;
   });
 
   afterEach(() => {
     visitService = null;
-    authService = null;
+    appService = null;
     activityService = null;
+    storageService = null;
   });
 
   it('should start a new visit', () => {
@@ -155,8 +156,8 @@ describe('Provider: VisitService', () => {
   });
 
   it('should call the activities service with the correct tester email set', () => {
-    const emailExample = 'test@dvsa.gov.uk';
-    authService.testerDetails.testerEmail = emailExample;
+    const emailExample = 'jack@dvsa.gov.uk';
+
     visitService.startVisit(TEST_STATION);
 
     expect(httpService.startVisit).toHaveBeenCalledTimes(1);
@@ -175,7 +176,9 @@ describe('Provider: VisitService', () => {
   });
 
   it('should create the alert with the dismiss logic', () => {
-    let alert = visitService.createDataClearingAlert(jasmine.createSpyObj('Loading', ['dismiss', 'present']));
+    let alert = visitService.createDataClearingAlert(
+      jasmine.createSpyObj('Loading', ['dismiss', 'present'])
+    );
     expect(alert.onDidDismiss).toHaveBeenCalledTimes(1);
   });
 });

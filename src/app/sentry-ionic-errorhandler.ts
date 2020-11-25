@@ -7,10 +7,7 @@ export class SentryIonicErrorHandler extends IonicErrorHandler {
 
     try {
       Sentry.withScope((scope) => {
-        scope.setTag(
-          'app-user',
-          JSON.parse(localStorage.getItem('tester-details')).testerObfuscatedOid
-        );
+        scope.setTag('app-user', localStorage.getItem('obs-tester-id'));
         Sentry.captureException(error.originalError || error);
       });
     } catch (e) {

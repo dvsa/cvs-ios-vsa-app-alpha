@@ -21,12 +21,12 @@ import {
 import { AppServiceMock } from '../../../test-config/services-mocks/app-service.mock';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { CallNumber } from '@ionic-native/call-number';
-import { Firebase } from '@ionic-native/firebase';
-import { AuthService } from '../../providers/global/auth.service';
-import { AuthServiceMock } from '../../../test-config/services-mocks/auth-service.mock';
+// import { Firebase } from '@ionic-native/firebase';
 import { Store } from '@ngrx/store';
-import { TestStore } from '../../providers/interceptors/auth.interceptor.spec';
 import { LogsProvider } from '../../modules/logs/logs.service';
+import { AuthenticationService } from '../../providers/auth';
+import { AuthenticationServiceMock } from '../../../test-config/services-mocks/authentication-service.mock';
+import { TestStore } from '../../modules/logs/data-store.service.mock';
 
 describe('Component: SignaturePadPage', () => {
   let fixture: ComponentFixture<SignaturePadPage>;
@@ -69,7 +69,7 @@ describe('Component: SignaturePadPage', () => {
       declarations: [SignaturePadPage],
       imports: [IonicModule.forRoot(SignaturePadPage)],
       providers: [
-        Firebase,
+        // Firebase,
         { provide: AppService, useClass: AppServiceMock },
         { provide: SignatureService, useValue: signatureServiceSpy },
         { provide: NavController, useFactory: () => NavControllerMock.instance() },
@@ -79,7 +79,7 @@ describe('Component: SignaturePadPage', () => {
         { provide: OpenNativeSettings, useValue: openNativeSettingsSpy },
         { provide: Events, useFactory: () => EventsMock.instance() },
         { provide: SignaturePad, useValue: signaturePadSpy },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: Store, useClass: TestStore },
         { provide: CallNumber, useValue: callNumberSpy },
         { provide: LogsProvider, useValue: logProviderSpy }

@@ -1,4 +1,23 @@
 ######################
+#######  ENV  ########
+######################
+BASE_URL=
+ENV=
+AZURE_CLIENT_ID=
+APP_KEY_PHONE_NUMBER=
+MSAL_HOST=
+MSAL_REDIRECT_URL=
+
+
+#########################
+#######  SENTRY  ########
+#########################
+SENTRY_DSN=
+SENTRY_AUTH_TOKEN=
+SENTRY_ORG=
+
+
+######################
 ####### DEVICE #######
 ######################
 export IPHONE8_P_ID=

@@ -11,7 +11,7 @@ import { VehicleModel } from '../../../../models/vehicle/vehicle.model';
 import { FIREBASE, ODOMETER_METRIC, REG_EX_PATTERNS } from '../../../../app/app.enums';
 import { VisitService } from '../../../../providers/visit/visit.service';
 import { VehicleService } from '../../../../providers/vehicle/vehicle.service';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
 
 @IonicPage()
 @Component({
@@ -33,9 +33,9 @@ export class OdometerReadingPage implements OnInit {
     private viewCtrl: ViewController,
     private navParams: NavParams,
     private vehicleService: VehicleService,
-    private cdRef: ChangeDetectorRef,
-    private firebaseLogsService: FirebaseLogsService
-  ) {
+    private cdRef: ChangeDetectorRef
+  ) // private firebaseLogsService: FirebaseLogsService
+  {
     this.vehicle = this.navParams.get('vehicle');
     this.errorIncomplete = this.navParams.get('errorIncomplete');
   }
@@ -69,21 +69,21 @@ export class OdometerReadingPage implements OnInit {
   }
 
   onSave() {
-    this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_end_time = Date.now();
+    // this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_end_time = Date.now();
 
-    this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_time_taken = this.firebaseLogsService.differenceInSeconds(
-      this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_start_time,
-      this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_end_time
-    );
-    this.firebaseLogsService.logEvent(
-      FIREBASE.ADD_ODOMETER_READING_TIME_TAKEN,
-      FIREBASE.ADD_ODOMETER_READING_START_TIME,
-      this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_start_time.toString(),
-      FIREBASE.ADD_ODOMETER_READING_END_TIME,
-      this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_end_time.toString(),
-      FIREBASE.ADD_ODOMETER_READING_TIME_TAKEN,
-      this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_time_taken
-    );
+    // this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_time_taken = this.firebaseLogsService.differenceInSeconds(
+    //   this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_start_time,
+    //   this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_end_time
+    // );
+    // this.firebaseLogsService.logEvent(
+    //   FIREBASE.ADD_ODOMETER_READING_TIME_TAKEN,
+    //   FIREBASE.ADD_ODOMETER_READING_START_TIME,
+    //   this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_start_time.toString(),
+    //   FIREBASE.ADD_ODOMETER_READING_END_TIME,
+    //   this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_end_time.toString(),
+    //   FIREBASE.ADD_ODOMETER_READING_TIME_TAKEN,
+    //   this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_time_taken
+    // );
 
     this.vehicle = this.vehicleService.setOdometer(
       this.vehicle,

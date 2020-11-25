@@ -21,7 +21,7 @@ import {
   FIREBASE_DEFECTS,
   TEST_TYPE_RESULTS
 } from '../../../../app/app.enums';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
 import { ProhibitionClearanceTestTypesData } from '../../../../assets/app-data/test-types-data/prohibition-clearance-test-types.data';
 import { TestTypesFieldsMetadata } from '../../../../assets/app-data/test-types-data/test-types-fields.metadata';
 
@@ -54,8 +54,8 @@ export class DefectDetailsPage implements OnInit {
     public viewCtrl: ViewController,
     public defectsService: DefectsService,
     private testTypeService: TestTypeService,
-    private alertCtrl: AlertController,
-    private firebaseLogsService: FirebaseLogsService
+    // private firebaseLogsService: FirebaseLogsService
+    private alertCtrl: AlertController
   ) {
     this.vehicleTest = navParams.get('vehicleTest');
     this.defect = navParams.get('deficiency');
@@ -203,10 +203,10 @@ export class DefectDetailsPage implements OnInit {
   }
 
   private logFirebaseNotesChanged() {
-    this.firebaseLogsService.logEvent(
-      FIREBASE_DEFECTS.DEFECT_NOTES_USAGE,
-      FIREBASE_DEFECTS.DEFICIENCY_REFERENCE,
-      this.defect.deficiencyRef
-    );
+    // this.firebaseLogsService.logEvent(
+    //   FIREBASE_DEFECTS.DEFECT_NOTES_USAGE,
+    //   FIREBASE_DEFECTS.DEFICIENCY_REFERENCE,
+    //   this.defect.deficiencyRef
+    // );
   }
 }

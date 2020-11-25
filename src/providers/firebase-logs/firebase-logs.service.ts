@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Firebase } from '@ionic-native/firebase';
+// import { Firebase } from '@ionic-native/firebase';
 
 @Injectable()
 export class FirebaseLogsService {
@@ -39,7 +39,7 @@ export class FirebaseLogsService {
     add_test_type_time_taken: 0
   };
 
-  constructor(private firebase: Firebase) {}
+  constructor(private firebase: any) {}
 
   logEvent(
     eventName: string,

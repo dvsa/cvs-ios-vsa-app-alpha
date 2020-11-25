@@ -9,8 +9,8 @@ import { VisitService } from '../../../../providers/visit/visit.service';
 import { VisitServiceMock } from '../../../../../test-config/services-mocks/visit-service.mock';
 import { TestTypeService } from '../../../../providers/test-type/test-type.service';
 import { TestTypeServiceMock } from '../../../../../test-config/services-mocks/test-type-service.mock';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { AlertControllerMock, NavControllerMock } from 'ionic-mocks';
 
 describe('Component: TestAbandoningPage', () => {
@@ -32,7 +32,7 @@ describe('Component: TestAbandoningPage', () => {
       providers: [
         { provide: NavController, useFactory: () => NavControllerMock.instance() },
         { provide: AlertController, useFactory: () => AlertControllerMock.instance() },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: VisitService, useClass: VisitServiceMock },
         { provide: TestTypeService, useClass: TestTypeServiceMock },
         { provide: NavParams, useClass: NavParamsMock }

@@ -16,19 +16,19 @@ import {
   NavControllerMock,
   ViewControllerMock
 } from 'ionic-mocks';
-import { AuthService } from '../../../../../providers/global/auth.service';
-import { AuthServiceMock } from '../../../../../../test-config/services-mocks/auth-service.mock';
 import { VehicleService } from '../../../../../providers/vehicle/vehicle.service';
 import { VehicleServiceMock } from '../../../../../../test-config/services-mocks/vehicle-service.mock';
 import { StorageService } from '../../../../../providers/natives/storage.service';
 import { StorageServiceMock } from '../../../../../../test-config/services-mocks/storage-service.mock';
-import { Firebase } from '@ionic-native/firebase';
+// import { Firebase } from '@ionic-native/firebase';
 import { Store } from '@ngrx/store';
-import { TestStore } from '../../../../../providers/interceptors/auth.interceptor.spec';
+import { TestStore } from '../../../../../modules/logs/data-store.service.mock';
 import { VehicleDataMock } from '../../../../../assets/data-mocks/vehicle-data.mock';
 import { PAGE_NAMES } from '../../../../../app/app.enums';
 import { Observable } from 'rxjs';
 import { LogsProvider } from '../../../../../modules/logs/logs.service';
+import { AuthenticationService } from '../../../../../providers/auth/authentication/authentication.service';
+import { AuthenticationServiceMock } from '../../../../../../test-config/services-mocks/authentication-service.mock';
 
 describe('Component: ', () => {
   let component: MultipleTechRecordsSelectionPage;
@@ -53,13 +53,13 @@ describe('Component: ', () => {
         { provide: NavController, useFactory: () => NavControllerMock.instance() },
         { provide: NavParams, useClass: NavParamsMock },
         { provide: ViewController, useFactory: () => ViewControllerMock.instance() },
-        { provide: AuthService, useClass: AuthServiceMock },
         { provide: VehicleService, useClass: VehicleServiceMock },
         { provide: StorageService, useClass: StorageServiceMock },
-        {
-          provide: Firebase,
-          useValue: jasmine.createSpyObj<Firebase>(['logEvent', 'setScreenName'])
-        },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
+        // {
+        //   provide: Firebase,
+        //   useValue: jasmine.createSpyObj<Firebase>(['logEvent', 'setScreenName'])
+        // },
         { provide: Store, useClass: TestStore },
         { provide: LoadingController, useFactory: () => LoadingControllerMock.instance() },
         { provide: AlertController, useFactory: () => AlertControllerMock.instance() },

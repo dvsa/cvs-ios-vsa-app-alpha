@@ -3,8 +3,6 @@ import { StorageService } from '../natives/storage.service';
 import { ActivityService } from './activity.service';
 import { AppService } from '../global/app.service';
 import { AppServiceMock } from '../../../test-config/services-mocks/app-service.mock';
-import { AuthService } from '../global/auth.service';
-import { AuthServiceMock } from '../../../test-config/services-mocks/auth-service.mock';
 import { HTTPService } from '../global/http.service';
 import { ActivityDataMock } from '../../assets/data-mocks/activity.data.mock';
 import { VisitModel } from '../../models/visit/visit.model';
@@ -12,13 +10,14 @@ import { TestResultsDataMock } from '../../assets/data-mocks/test-results-data.m
 import { TestResultModel } from '../../models/tests/test-result.model';
 import { WaitTimeReasonsData } from '../../assets/app-data/wait-time-data/wait-time-reasons.data';
 import { VISIT } from '../../app/app.enums';
+import { AuthenticationService } from '../auth';
+import { AuthenticationServiceMock } from '../../../test-config/services-mocks/authentication-service.mock';
 
 describe('Provider: ActivityService', () => {
   let activityService: ActivityService;
   let storageService: StorageService;
   let storageServiceSpy: any;
   let appService: AppService;
-  let authService: AuthService;
   let httpService: HTTPService;
   let httpServiceSpy: any;
 
@@ -341,7 +340,7 @@ describe('Provider: ActivityService', () => {
         ActivityService,
         { provide: StorageService, useValue: storageServiceSpy },
         { provide: AppService, useClass: AppServiceMock },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: HTTPService, useValue: httpServiceSpy }
       ]
     });
@@ -349,14 +348,12 @@ describe('Provider: ActivityService', () => {
     activityService = TestBed.get(ActivityService);
     storageService = TestBed.get(StorageService);
     appService = TestBed.get(AppService);
-    authService = TestBed.get(AuthService);
     httpService = TestBed.get(HTTPService);
   });
 
   afterEach(() => {
     storageService = null;
     appService = null;
-    authService = null;
     httpService = null;
   });
 

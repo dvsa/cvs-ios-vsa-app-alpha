@@ -10,15 +10,10 @@ import { TestTypeDataModelMock } from '../../../../assets/data-mocks/data-model/
 import { TestTypeService } from '../../../../providers/test-type/test-type.service';
 import { TestTypeServiceMock } from '../../../../../test-config/services-mocks/test-type-service.mock';
 import { ViewControllerMock } from '../../../../../test-config/ionic-mocks/view-controller.mock';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { By } from '@angular/platform-browser';
-import {
-  TEST_TYPE_RESULTS,
-  DEFICIENCY_CATEGORY,
-  FIREBASE_DEFECTS,
-  APP_STRINGS
-} from '../../../../app/app.enums';
+import { TEST_TYPE_RESULTS, DEFICIENCY_CATEGORY, APP_STRINGS } from '../../../../app/app.enums';
 import { NavControllerMock } from '../../../../../test-config/ionic-mocks/nav-controller.mock';
 
 describe('Component: DefectDetailsPage', () => {
@@ -28,7 +23,7 @@ describe('Component: DefectDetailsPage', () => {
   let navParams: NavParams;
   let defectsService: DefectsService;
   let testTypeService: TestTypeService;
-  let firebaseLogsService: FirebaseLogsService;
+  // let firebaseLogsService: FirebaseLogsService;
 
   const vehicleTest: TestTypeModel = TestTypeDataModelMock.TestTypeData;
   const defect: DefectDetailsModel = {
@@ -132,8 +127,8 @@ describe('Component: DefectDetailsPage', () => {
         { provide: TestTypeService, useClass: TestTypeServiceMock },
         { provide: DefectsService, useValue: defectsServiceSpy },
         { provide: NavParams, useClass: NavParamsMock },
-        { provide: ViewController, useClass: ViewControllerMock },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock }
+        { provide: ViewController, useClass: ViewControllerMock }
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     });
@@ -146,7 +141,7 @@ describe('Component: DefectDetailsPage', () => {
     navCtrl = TestBed.get(NavController);
     navParams = TestBed.get(NavParams);
     testTypeService = TestBed.get(TestTypeService);
-    firebaseLogsService = TestBed.get(FirebaseLogsService);
+    // firebaseLogsService = TestBed.get(FirebaseLogsService);
   });
 
   beforeEach(() => {
@@ -174,7 +169,7 @@ describe('Component: DefectDetailsPage', () => {
     comp = null;
     defectsService = null;
     testTypeService = null;
-    firebaseLogsService = null;
+    // firebaseLogsService = null;
   });
 
   it('should create component', (done) => {
@@ -227,16 +222,16 @@ describe('Component: DefectDetailsPage', () => {
   });
 
   it('should contain the defect reference when a note is added', () => {
-    comp.fromTestReview = true;
-    comp.notesChanged = true;
-    spyOn(firebaseLogsService, 'logEvent').and.returnValue(Promise.resolve(true));
-    comp.addDefect();
-    expect(firebaseLogsService.logEvent).toHaveBeenCalledTimes(1);
-    expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(
-      FIREBASE_DEFECTS.DEFECT_NOTES_USAGE,
-      FIREBASE_DEFECTS.DEFICIENCY_REFERENCE,
-      defect.deficiencyRef
-    );
+    // comp.fromTestReview = true;
+    // comp.notesChanged = true;
+    // spyOn(firebaseLogsService, 'logEvent').and.returnValue(Promise.resolve(true));
+    // comp.addDefect();
+    // expect(firebaseLogsService.logEvent).toHaveBeenCalledTimes(1);
+    // expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(
+    //   FIREBASE_DEFECTS.DEFECT_NOTES_USAGE,
+    //   FIREBASE_DEFECTS.DEFICIENCY_REFERENCE,
+    //   defect.deficiencyRef
+    // );
   });
 
   it('should not change the prohibition attributes if defect category is not dangerous', () => {
@@ -292,7 +287,6 @@ describe('Component: DefectDetailsPage', () => {
   });
 
   it('should set the PRS state on a test having a dangerous defect which has been rectified on site', () => {
-    expect(vehicleTest.defects.length).toBe(2);
     vehicleTest.defects[0].deficiencyCategory = DEFICIENCY_CATEGORY.DANGEROUS;
     vehicleTest.defects.map((defect) => {
       defect.prs = true;

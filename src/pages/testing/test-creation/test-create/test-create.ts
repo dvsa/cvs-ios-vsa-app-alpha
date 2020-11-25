@@ -29,7 +29,7 @@ import { TestTypesFieldsMetadata } from '../../../../assets/app-data/test-types-
 import { CommonFunctionsService } from '../../../../providers/utils/common-functions';
 import { CallNumber } from '@ionic-native/call-number';
 import { AppService } from '../../../../providers/global/app.service';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
 import { TestTypeService } from '../../../../providers/test-type/test-type.service';
 import { EuVehicleCategoryData } from '../../../../assets/app-data/eu-vehicle-category/eu-vehicle-category';
 
@@ -65,7 +65,7 @@ export class TestCreatePage implements OnInit {
     private events: Events,
     private commonFunctions: CommonFunctionsService,
     private modalCtrl: ModalController,
-    private firebaseLogsService: FirebaseLogsService,
+    // private firebaseLogsService: FirebaseLogsService,
     private testTypeService: TestTypeService
   ) {
     this.testTypesFieldsMetadata = TestTypesFieldsMetadata.FieldsMetadata;
@@ -106,7 +106,7 @@ export class TestCreatePage implements OnInit {
   }
 
   ionViewDidEnter() {
-    this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.TEST_OVERVIEW);
+    // this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.TEST_OVERVIEW);
   }
 
   ionViewWillLeave() {
@@ -271,10 +271,18 @@ export class TestCreatePage implements OnInit {
           isInProgress = true;
           testType.completionStatus = TEST_COMPLETION_STATUS.IN_PROGRESS;
         }
-        testType.testResult = this.testTypeService.setTestResult(testType, testTypeFieldMetadata.hasDefects);
-
-      } else if (testType.testTypeId === testTypeFieldMetadata.testTypeId && !testTypeFieldMetadata.sections.length) {
-        testType.testResult = this.testTypeService.setTestResult(testType, testTypeFieldMetadata.hasDefects);
+        testType.testResult = this.testTypeService.setTestResult(
+          testType,
+          testTypeFieldMetadata.hasDefects
+        );
+      } else if (
+        testType.testTypeId === testTypeFieldMetadata.testTypeId &&
+        !testTypeFieldMetadata.sections.length
+      ) {
+        testType.testResult = this.testTypeService.setTestResult(
+          testType,
+          testTypeFieldMetadata.hasDefects
+        );
         isInProgress = false;
         testType.completionStatus = TEST_COMPLETION_STATUS.EDIT;
       }
@@ -284,7 +292,7 @@ export class TestCreatePage implements OnInit {
   }
 
   addVehicleTest(vehicle: VehicleModel): void {
-    this.firebaseLogsService.add_test_type_time.add_test_type_start_time = Date.now();
+    // this.firebaseLogsService.add_test_type_time.add_test_type_start_time = Date.now();
     this.navCtrl.push(PAGE_NAMES.TEST_TYPES_LIST_PAGE, { vehicleData: vehicle });
   }
 
@@ -310,7 +318,7 @@ export class TestCreatePage implements OnInit {
   }
 
   onOdometer(index: number) {
-    this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_start_time = Date.now();
+    // this.firebaseLogsService.add_odometer_reading_time.add_odometer_reading_start_time = Date.now();
 
     const MODAL = this.modalCtrl.create(PAGE_NAMES.ODOMETER_READING_PAGE, {
       vehicle: this.testData.vehicles[index],
@@ -373,11 +381,11 @@ export class TestCreatePage implements OnInit {
   }
 
   removeVehicleTest(vehicle: VehicleModel, vehicleTest: TestTypeModel) {
-    this.firebaseLogsService.logEvent(
-      FIREBASE.REMOVE_TEST_TYPE,
-      FIREBASE.TEST_TYPE_NAME,
-      vehicleTest.testTypeName
-    );
+    // this.firebaseLogsService.logEvent(
+    //   FIREBASE.REMOVE_TEST_TYPE,
+    //   FIREBASE.TEST_TYPE_NAME,
+    //   vehicleTest.testTypeName
+    // );
     this.vehicleService.removeSicFields(vehicle, this.completedFields);
     this.vehicleService.removeTestType(vehicle, vehicleTest);
   }
@@ -469,30 +477,30 @@ export class TestCreatePage implements OnInit {
         buttons: [APP_STRINGS.OK]
       });
       alert.present();
-      this.firebaseLogsService.logEvent(
-        FIREBASE.TEST_ERROR,
-        FIREBASE.ERROR,
-        FIREBASE.NO_TEST_ADDED
-      );
-      this.firebaseLogsService.logEvent(
-        FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
-        FIREBASE.MISSING_MADATORY_FIELD,
-        FIREBASE.NO_TEST_ADDED
-      );
+      // this.firebaseLogsService.logEvent(
+      //   FIREBASE.TEST_ERROR,
+      //   FIREBASE.ERROR,
+      //   FIREBASE.NO_TEST_ADDED
+      // );
+      // this.firebaseLogsService.logEvent(
+      //   FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
+      //   FIREBASE.MISSING_MADATORY_FIELD,
+      //   FIREBASE.NO_TEST_ADDED
+      // );
       alert.onDidDismiss(() => (this.changeOpacity = false));
     } else if (!finishedTest || !requiredFieldsCompleted) {
       this.changeOpacity = false;
       this.errorIncomplete = true;
-      this.firebaseLogsService.logEvent(
-        FIREBASE.TEST_ERROR,
-        FIREBASE.ERROR,
-        FIREBASE.NOT_ALL_TESTS_COMPLETED
-      );
+      // this.firebaseLogsService.logEvent(
+      //   FIREBASE.TEST_ERROR,
+      //   FIREBASE.ERROR,
+      //   FIREBASE.NOT_ALL_TESTS_COMPLETED
+      // );
       if (!finishedTest) {
-        this.firebaseLogsService.logEvent(
-          FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
-          FIREBASE.NOT_ALL_TESTS_COMPLETED
-        );
+        // this.firebaseLogsService.logEvent(
+        //   FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
+        //   FIREBASE.NOT_ALL_TESTS_COMPLETED
+        // );
       }
     } else {
       this.changeOpacity = false;
@@ -506,24 +514,24 @@ export class TestCreatePage implements OnInit {
   }
 
   logMissingFields(vehicle) {
-    if (!vehicle.countryOfRegistration)
-      this.firebaseLogsService.logEvent(
-        FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
-        FIREBASE.MISSING_MADATORY_FIELD,
-        FIREBASE.COUNTRY_OF_REGISTRATION
-      );
-    if (!vehicle.euVehicleCategory)
-      this.firebaseLogsService.logEvent(
-        FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
-        FIREBASE.MISSING_MADATORY_FIELD,
-        FIREBASE.EU_VEHICLE_CATEGORY
-      );
-    if (!vehicle.odometerReading)
-      this.firebaseLogsService.logEvent(
-        FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
-        FIREBASE.MISSING_MADATORY_FIELD,
-        FIREBASE.ODOMETER_READING
-      );
+    // if (!vehicle.countryOfRegistration)
+    // this.firebaseLogsService.logEvent(
+    //   FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
+    //   FIREBASE.MISSING_MADATORY_FIELD,
+    //   FIREBASE.COUNTRY_OF_REGISTRATION
+    // );
+    // if (!vehicle.euVehicleCategory)
+    // this.firebaseLogsService.logEvent(
+    //   FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
+    //   FIREBASE.MISSING_MADATORY_FIELD,
+    //   FIREBASE.EU_VEHICLE_CATEGORY
+    // );
+    // if (!vehicle.odometerReading)
+    // this.firebaseLogsService.logEvent(
+    //   FIREBASE.TEST_REVIEW_UNSUCCESSFUL,
+    //   FIREBASE.MISSING_MADATORY_FIELD,
+    //   FIREBASE.ODOMETER_READING
+    // );
   }
 
   isVehicleOfType(vehicle: VehicleModel, ...vehicleType: VEHICLE_TYPE[]) {

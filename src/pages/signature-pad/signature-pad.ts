@@ -8,15 +8,16 @@ import {
 } from 'ionic-angular';
 import { SignaturePad } from 'angular2-signaturepad/signature-pad';
 import { ScreenOrientation } from '@ionic-native/screen-orientation';
+import { CallNumber } from '@ionic-native/call-number';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings';
+// import { Firebase } from '@ionic-native/firebase';
+
 import { APP_STRINGS, LOCAL_STORAGE, SIGNATURE_STATUS } from '../../app/app.enums';
 import { SignaturePopoverComponent } from '../../components/signature-popover/signature-popover';
-import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { SignatureService } from '../../providers/signature/signature.service';
 import { AppService } from '../../providers/global/app.service';
-import { CallNumber } from '@ionic-native/call-number';
-import { AppConfig } from '../../../config/app.config';
-import { Firebase } from '@ionic-native/firebase';
-import { AuthService } from '../../providers/global/auth.service';
+import { default as AppConfig } from '../../../config/application.hybrid';
+import { AuthenticationService } from '../../providers/auth/authentication/authentication.service';
 import { LogsProvider } from '../../modules/logs/logs.service';
 
 @IonicPage()
@@ -46,8 +47,8 @@ export class SignaturePadPage implements OnInit {
     private screenOrientation: ScreenOrientation,
     private openNativeSettings: OpenNativeSettings,
     private signatureService: SignatureService,
-    private firebase: Firebase,
-    private authService: AuthService,
+    // private firebase: Firebase,
+    private authenticationService: AuthenticationService,
     private callNumber: CallNumber,
     private logProvider: LogsProvider
   ) {
@@ -97,13 +98,13 @@ export class SignaturePadPage implements OnInit {
         {
           text: APP_STRINGS.CALL_SUPP_BTN,
           handler: () => {
-            this.callNumber.callNumber(AppConfig.KEY_PHONE_NUMBER, true);
+            this.callNumber.callNumber(AppConfig.app.KEY_PHONE_NUMBER, true);
           }
         },
         {
           text: APP_STRINGS.TRY_AGAIN_BTN,
           handler: () => {
-            this.oid = this.authService.getOid();
+            this.oid = this.authenticationService.tokenInfo.oid;
             this.signatureService.saveSignature().subscribe(
               (response) => {
                 this.logProvider.dispatchLog({
@@ -125,10 +126,10 @@ export class SignaturePadPage implements OnInit {
                   timestamp: Date.now()
                 });
 
-                this.firebase.logEvent('test_error', {
-                  content_type: 'error',
-                  item_id: 'Saving signature failed'
-                });
+                // this.firebase.logEvent('test_error', {
+                //   content_type: 'error',
+                //   item_id: 'Saving signature failed'
+                // });
                 this.showConfirm();
               }
             );
@@ -144,16 +145,17 @@ export class SignaturePadPage implements OnInit {
    * Alerts do not allow images
    */
   presentPopover() {
-    if (!this.signaturePad.isEmpty()) {
-      const POPOVER = this.popoverCtrl.create(SignaturePopoverComponent);
-      POPOVER.present();
-    } else {
+    if (this.signaturePad.isEmpty()) {
       const EMPTY_SIGNATURE = this.alertCtrl.create({
         title: APP_STRINGS.SIGN_NOT_ENTERED,
         message: APP_STRINGS.SIGN_ENTER,
         buttons: [APP_STRINGS.OK]
       });
       EMPTY_SIGNATURE.present();
+
+      return;
     }
+
+    this.popoverCtrl.create(SignaturePopoverComponent).present();
   }
 }

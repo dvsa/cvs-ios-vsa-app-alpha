@@ -11,7 +11,7 @@ import {
 } from '../../../../app/app.enums';
 import { TestResultModel } from '../../../../models/tests/test-result.model';
 import { TestTypeModel } from '../../../../models/tests/test-type.model';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
 
 @IonicPage()
 @Component({
@@ -31,9 +31,9 @@ export class VehicleHistoryPage {
     public navCtrl: NavController,
     public navParams: NavParams,
     public viewCtrl: ViewController,
-    public commonFunc: CommonFunctionsService,
-    private firebaseLogsService: FirebaseLogsService
-  ) {
+    public commonFunc: CommonFunctionsService
+  ) // private firebaseLogsService: FirebaseLogsService
+  {
     this.vehicleData = navParams.get('vehicleData');
     this.testResultHistory = navParams.get('testResultsHistory');
   }
@@ -50,7 +50,7 @@ export class VehicleHistoryPage {
   }
 
   ionViewDidEnter() {
-    this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.VEHICLE_TEST_HISTORY);
+    // this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.VEHICLE_TEST_HISTORY);
   }
 
   showTestDetails(testIndex: number, testTypeIndex: number): void {

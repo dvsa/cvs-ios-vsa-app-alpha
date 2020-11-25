@@ -4,3 +4,7 @@ export class DataStoreProviderMock {
   setSecureContainer = jasmine.createSpy('setSecureContainer').and.returnValue(Promise.resolve());
   removeItem = jasmine.createSpy('removeItem');
 }
+
+export class TestStore {
+  dispatch() {}
+}

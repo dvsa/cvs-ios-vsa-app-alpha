@@ -11,11 +11,11 @@ import { ODOMETER_METRIC, STORAGE, TEST_TYPE_RESULTS } from '../../app/app.enums
 import { VehicleTechRecordModel } from '../../models/vehicle/tech-record.model';
 import { VehicleDataMock } from '../../assets/data-mocks/vehicle-data.mock';
 import { Store } from '@ngrx/store';
-import { TestStore } from '../interceptors/auth.interceptor.spec';
+import { TestStore } from '../../modules/logs/data-store.service.mock';
 import { StorageService } from '../natives/storage.service';
 import { StorageServiceMock } from '../../../test-config/services-mocks/storage-service.mock';
-import { AuthService } from '../global/auth.service';
-import { AuthServiceMock } from '../../../test-config/services-mocks/auth-service.mock';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
+import { AuthenticationServiceMock } from '../../../test-config/services-mocks/authentication-service.mock';
 import { of } from 'rxjs/observable/of';
 import { HttpEventType, HttpHeaders } from '@angular/common/http';
 import { TestResultsHistoryDataMock } from '../../assets/data-mocks/test-results-history-data.mock';
@@ -67,7 +67,7 @@ describe('Provider: VehicleService', () => {
         { provide: HTTPService, useValue: httpServiceSpy },
         { provide: Store, useClass: TestStore },
         { provide: StorageService, useClass: StorageServiceMock },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: LogsProvider, useValue: logProviderSpy }
       ]
     });

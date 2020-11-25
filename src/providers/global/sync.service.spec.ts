@@ -1,4 +1,4 @@
-import { async, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 import { SyncService } from './sync.service';
 import { AlertController, Events, LoadingController } from 'ionic-angular';
 import { StorageService } from '../natives/storage.service';
@@ -14,13 +14,13 @@ import { TestStationDataMock } from '../../assets/data-mocks/reference-data-mock
 import { TestTypesReferenceDataMock } from '../../assets/data-mocks/reference-data-mocks/test-types.mock';
 import { AppService } from './app.service';
 import { AppServiceMock } from '../../../test-config/services-mocks/app-service.mock';
-import { Firebase } from '@ionic-native/firebase';
-import { AuthService } from './auth.service';
-import { AuthServiceMock } from '../../../test-config/services-mocks/auth-service.mock';
+// import { Firebase } from '@ionic-native/firebase';
 import { AppVersion } from '@ionic-native/app-version';
 import { LogsProvider } from '../../modules/logs/logs.service';
 import { APP_UPDATE } from '../../app/app.enums';
 import { VERSION_POPUP_MSG } from '../../app/app.constants';
+import { AuthenticationService } from '../auth';
+import { AuthenticationServiceMock } from '../../../test-config/services-mocks/authentication-service.mock';
 
 describe('Provider: SyncService', () => {
   let syncService: SyncService;
@@ -65,14 +65,14 @@ describe('Provider: SyncService', () => {
 
     TestBed.configureTestingModule({
       providers: [
-        Firebase,
+        // Firebase,
         SyncService,
         OpenNativeSettings,
         CallNumber,
         { provide: AppService, useClass: AppServiceMock },
         { provide: HTTPService, useValue: httpServiceSpy },
         { provide: StorageService, useValue: storageServiceSpy },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: LoadingController, useFactory: () => LoadingControllerMock.instance() },
         { provide: AlertController, useFactory: () => AlertControllerMock.instance() },
         { provide: Events, useFactory: () => EventsMock.instance() },

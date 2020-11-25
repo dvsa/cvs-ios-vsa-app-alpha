@@ -18,10 +18,11 @@ export class AppServiceMock {
     this.isJwtTokenStored = false;
   }
 
-  enableCache() {
-  }
+  enableCache() {}
 
   isAccessibilityTextZoomEnabled() {
     return false;
   }
+
+  manageAppInit() {}
 }

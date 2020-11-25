@@ -32,24 +32,14 @@ import { StorageServiceMock } from '../../../../test-config/services-mocks/stora
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { VisitDataMock } from '../../../assets/data-mocks/visit-data.mock';
-import { AuthService } from '../../../providers/global/auth.service';
-import { FirebaseLogsService } from '../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { FirebaseLogsService } from '../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { ActivityService } from '../../../providers/activity/activity.service';
 import { ActivityDataMock } from '../../../assets/data-mocks/activity.data.mock';
 import { TestStationDataMock } from '../../../assets/data-mocks/reference-data-mocks/test-station-data.mock';
 import { TestModel } from '../../../models/tests/test.model';
-import {
-  APP_STRINGS,
-  AUTH,
-  FIREBASE,
-  PAGE_NAMES,
-  STORAGE,
-  TEST_REPORT_STATUSES,
-  VEHICLE_TYPE,
-  VISIT
-} from '../../../app/app.enums';
-import { Firebase } from '@ionic-native/firebase';
+import { APP_STRINGS, AUTH, PAGE_NAMES, STORAGE, VEHICLE_TYPE } from '../../../app/app.enums';
+// import { Firebase } from '@ionic-native/firebase';
 import { Observable } from 'rxjs';
 import { VehicleDataMock } from '../../../assets/data-mocks/vehicle-data.mock';
 import { VehicleModel } from '../../../models/vehicle/vehicle.model';
@@ -58,26 +48,27 @@ import { VisitModel } from '../../../models/visit/visit.model';
 import { LogsProvider } from '../../../modules/logs/logs.service';
 import { ActivityModel } from '../../../models/visit/activity.model';
 import { of } from 'rxjs/observable/of';
+import { AuthenticationService } from '../../../providers/auth/authentication/authentication.service';
+import { AuthenticationServiceMock } from './../../../../test-config/services-mocks/authentication-service.mock';
 
 describe('Component: VisitTimelinePage', () => {
   let component: VisitTimelinePage;
   let fixture: ComponentFixture<VisitTimelinePage>;
   let openNativeSettingsSpy: any;
   let loadingCtrl: LoadingController;
-  let firebaseLogsService: FirebaseLogsService;
+  // let firebaseLogsService: FirebaseLogsService;
   let modalCtrl: ModalController;
   let alertCtrl: AlertController;
   let navCtrl: NavController;
   let storageService: StorageService;
   let storageServiceSpy: any;
-  let authService: AuthService;
   let activityService: ActivityService;
   let activityServiceSpy: jasmine.SpyObj<ActivityService>;
-  let authServiceSpy: any;
   let visitService: VisitService;
   let visitServiceSpy: jasmine.SpyObj<VisitService>;
   let logProvider: LogsProvider;
   let logProviderSpy: any;
+  let authenticationService: AuthenticationService;
 
   let waitActivity = ActivityDataMock.WaitActivityData;
   let testStation = TestStationDataMock.TestStationData[0];
@@ -116,10 +107,6 @@ describe('Component: VisitTimelinePage', () => {
       dispatchLog: () => true
     });
 
-    authServiceSpy = jasmine.createSpyObj('AuthService', {
-      getOid: () => 'user_oid'
-    });
-
     activityServiceSpy = jasmine.createSpyObj('ActivityService', [
       'createActivity',
       'getActivities',
@@ -136,9 +123,9 @@ describe('Component: VisitTimelinePage', () => {
       declarations: [VisitTimelinePage],
       imports: [IonicModule.forRoot(VisitTimelinePage), PipesModule],
       providers: [
-        Firebase,
+        // Firebase,
         { provide: ModalController, useFactory: () => ModalControllerMock.instance() },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: NavController, useFactory: () => NavControllerMock.instance() },
         { provide: NavParams, useClass: NavParamsMock },
         { provide: StateReformingService, useClass: StateReformingServiceMock },
@@ -151,7 +138,7 @@ describe('Component: VisitTimelinePage', () => {
         { provide: ActivityService, useValue: activityServiceSpy },
         { provide: VisitService, useValue: visitServiceSpy },
         { provide: StorageService, useClass: StorageServiceMock },
-        { provide: AuthService, useValue: authServiceSpy },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: OpenNativeSettings, useValue: openNativeSettingsSpy },
         { provide: LogsProvider, useValue: logProviderSpy },
         FormatVrmPipe
@@ -164,14 +151,14 @@ describe('Component: VisitTimelinePage', () => {
     fixture = TestBed.createComponent(VisitTimelinePage);
     component = fixture.componentInstance;
     loadingCtrl = TestBed.get(LoadingController);
-    firebaseLogsService = TestBed.get(FirebaseLogsService);
+    // firebaseLogsService = TestBed.get(FirebaseLogsService);
     activityService = TestBed.get(ActivityService);
     visitService = TestBed.get(VisitService);
     modalCtrl = TestBed.get(ModalController);
     alertCtrl = TestBed.get(AlertController);
     navCtrl = TestBed.get(NavController);
     storageService = TestBed.get(StorageService);
-    authService = TestBed.get(AuthService);
+    authenticationService = TestBed.get(AuthenticationService);
     logProvider = TestBed.get(LogsProvider);
   });
 
@@ -179,7 +166,7 @@ describe('Component: VisitTimelinePage', () => {
     fixture.destroy();
     component = null;
     loadingCtrl = null;
-    firebaseLogsService = null;
+    // firebaseLogsService = null;
     modalCtrl = null;
     alertCtrl = null;
     storageService = null;
@@ -198,7 +185,7 @@ describe('Component: VisitTimelinePage', () => {
 
   it('should test if logEvent method was called', () => {
     component.createNewTestReport();
-    expect(firebaseLogsService.search_vehicle_time.search_vehicle_start_time).toBeTruthy();
+    // expect(firebaseLogsService.search_vehicle_time.search_vehicle_start_time).toBeTruthy();
   });
 
   // it('should check ionViewDidEnter logic', () => {
@@ -313,7 +300,7 @@ describe('Component: VisitTimelinePage', () => {
   describe('confirmEndVisit$', () => {
     beforeEach(() => {
       component.visit = getMockVisit();
-      spyOn(firebaseLogsService, 'logEvent');
+      // spyOn(firebaseLogsService, 'logEvent');
       spyOn(component, 'showLoading');
     });
 
@@ -333,7 +320,7 @@ describe('Component: VisitTimelinePage', () => {
       expect(component.isCreateTestEnabled).toBeFalsy();
       expect(component.showLoading).toHaveBeenCalledWith(APP_STRINGS.END_VISIT_LOADING);
       expect(visitService.endVisit).toHaveBeenCalledWith(getMockVisit().id);
-      expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(FIREBASE.SUBMIT_VISIT);
+      // expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(FIREBASE.SUBMIT_VISIT);
       expect(logProvider.dispatchLog).toHaveBeenCalled();
       expect(alertCtrl.create).toHaveBeenCalledWith({
         title: APP_STRINGS.SITE_VISIT_CLOSED_TITLE,
@@ -357,11 +344,11 @@ describe('Component: VisitTimelinePage', () => {
 
       expect(component.showLoading).toHaveBeenCalledWith('');
       expect(logProvider.dispatchLog).toHaveBeenCalled();
-      expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(
-        FIREBASE.TEST_ERROR,
-        FIREBASE.ERROR,
-        FIREBASE.ENDING_ACTIVITY_FAILED
-      );
+      // expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(
+      //   FIREBASE.TEST_ERROR,
+      //   FIREBASE.ERROR,
+      //   FIREBASE.ENDING_ACTIVITY_FAILED
+      // );
       expect(alertCtrl.create).toHaveBeenCalledWith({
         title: APP_STRINGS.UNABLE_TO_END_VISIT,
         message: APP_STRINGS.NO_INTERNET_CONNECTION,
@@ -405,11 +392,11 @@ describe('Component: VisitTimelinePage', () => {
 
         expect(component.showLoading).toHaveBeenCalledWith('');
         expect(logProvider.dispatchLog).toHaveBeenCalled();
-        expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(
-          FIREBASE.TEST_ERROR,
-          FIREBASE.ERROR,
-          FIREBASE.WAIT_ACTIVITY_SUBMISSION_FAILED
-        );
+        // expect(firebaseLogsService.logEvent).toHaveBeenCalledWith(
+        //   FIREBASE.TEST_ERROR,
+        //   FIREBASE.ERROR,
+        //   FIREBASE.WAIT_ACTIVITY_SUBMISSION_FAILED
+        // );
       });
     });
 

@@ -35,13 +35,12 @@ import { TestServiceMock } from '../../../../../test-config/services-mocks/test-
 import { NavParamsMock } from '../../../../../test-config/ionic-mocks/nav-params.mock';
 import { DefectsService } from '../../../../providers/defects/defects.service';
 import { VisitDataMock } from '../../../../assets/data-mocks/visit-data.mock';
-import { AuthService } from '../../../../providers/global/auth.service';
-import { AuthServiceMock } from '../../../../../test-config/services-mocks/auth-service.mock';
-import { TestStore } from '../../../../providers/interceptors/auth.interceptor.spec';
+import { AuthenticationService } from '../../../../providers/auth/authentication/authentication.service';
+import { AuthenticationServiceMock } from '../../../../../test-config/services-mocks/authentication-service.mock';
 import { TestResultServiceMock } from '../../../../../test-config/services-mocks/test-result-service.mock';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
-import { Firebase } from '@ionic-native/firebase';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { Firebase } from '@ionic-native/firebase';
 import { ActivityService } from '../../../../providers/activity/activity.service';
 import { ActivityServiceMock } from '../../../../../test-config/services-mocks/activity-service.mock';
 import { VehicleModel } from '../../../../models/vehicle/vehicle.model';
@@ -82,7 +81,7 @@ describe('Component: TestReviewPage', () => {
       declarations: [TestReviewPage],
       imports: [IonicModule.forRoot(TestReviewPage)],
       providers: [
-        Firebase,
+        // Firebase,
         CommonFunctionsService,
         OpenNativeSettings,
         DefectsService,
@@ -99,9 +98,9 @@ describe('Component: TestReviewPage', () => {
         { provide: StateReformingService, useClass: StateReformingServiceMock },
         { provide: VehicleService, useClass: VehicleServiceMock },
         { provide: VisitService, useClass: VisitServiceMock },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: NavParams, useClass: NavParamsMock },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: AppService, useClass: AppServiceMock },
         { provide: LogsProvider, useValue: logProviderSpy }
       ],

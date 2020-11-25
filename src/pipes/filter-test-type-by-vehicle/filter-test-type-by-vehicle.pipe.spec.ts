@@ -3,10 +3,10 @@ import { TestTypesReferenceDataModel } from '../../models/reference-data-models/
 import { VehicleDataMock } from '../../assets/data-mocks/vehicle-data.mock';
 import { TestTypesReferenceDataMock } from '../../assets/data-mocks/reference-data-mocks/test-types.mock';
 import { cloneDeep } from 'lodash';
-import { AuthService } from '../../providers/global/auth.service';
+import { AuthenticationService } from '../../providers/auth';
 
 describe('FilterTestTypeByVehiclePipe', () => {
-  let pipe = new FilterTestTypeByVehiclePipe(new AuthService(null, null, null, null));
+  let pipe = new FilterTestTypeByVehiclePipe(new AuthenticationService(null, null, null, null));
   let testTypeData: TestTypesReferenceDataModel[] = TestTypesReferenceDataMock.TestTypesData;
   let vehicle = VehicleDataMock.VehicleData;
 

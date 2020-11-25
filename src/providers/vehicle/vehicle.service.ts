@@ -12,7 +12,7 @@ import { APP_STRINGS, STORAGE, TEST_TYPE_INPUTS } from '../../app/app.enums';
 import { HttpResponse } from '@angular/common/http';
 import { TestResultModel } from '../../models/tests/test-result.model';
 import { StorageService } from '../natives/storage.service';
-import { AuthService } from '../global/auth.service';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
 import { AlertController } from 'ionic-angular';
 import { LogsProvider } from '../../modules/logs/logs.service';
 
@@ -22,7 +22,7 @@ export class VehicleService {
     private httpService: HTTPService,
     public visitService: VisitService,
     public storageService: StorageService,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private logProvider: LogsProvider
   ) {}
 
@@ -74,9 +74,7 @@ export class VehicleService {
       .map((techRecordsResponse: HttpResponse<VehicleTechRecordModel[]>) => {
         this.logProvider.dispatchLog({
           type: 'info',
-          message: `${this.authService.getOid()} - ${techRecordsResponse.status} ${
-            techRecordsResponse.statusText
-          } for API call to ${techRecordsResponse.url}`,
+          message: `${this.authenticationService.tokenInfo.testerId} - ${techRecordsResponse.status} ${techRecordsResponse.statusText} for API call to ${techRecordsResponse.url}`,
           timestamp: Date.now()
         });
 
@@ -91,9 +89,7 @@ export class VehicleService {
     return this.httpService.getTestResultsHistory(systemNumber).map((data) => {
       this.logProvider.dispatchLog({
         type: 'info',
-        message: `${this.authService.getOid()} - ${data.status} ${
-          data.statusText
-        } for API call to ${data.url}`,
+        message: `${this.authenticationService.tokenInfo.testerId} - ${data.status} ${data.statusText} for API call to ${data.url}`,
         timestamp: Date.now()
       });
 

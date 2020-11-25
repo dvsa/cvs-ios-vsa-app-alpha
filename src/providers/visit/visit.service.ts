@@ -7,7 +7,7 @@ import { ActivityModel } from '../../models/visit/activity.model';
 import { Events, AlertController, App, Alert } from 'ionic-angular';
 import { STORAGE, VISIT, PAGE_NAMES, APP_STRINGS } from '../../app/app.enums';
 import { Observable } from 'rxjs';
-import { AuthService } from '../global/auth.service';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
 import { AppService } from '../global/app.service';
 import { ActivityService } from '../activity/activity.service';
 
@@ -18,12 +18,12 @@ export class VisitService {
   constructor(
     public storageService: StorageService,
     public appService: AppService,
-    public authService: AuthService,
     public events: Events,
+    private authenticationService: AuthenticationService,
     private httpService: HTTPService,
     private activityService: ActivityService,
     private alertCtrl: AlertController,
-    public app: App,
+    public app: App
   ) {
     this.visit = {} as VisitModel;
   }
@@ -35,9 +35,9 @@ export class VisitService {
     this.visit.testStationPNumber = testStation.testStationPNumber;
     this.visit.testStationEmail = testStation.testStationEmails[0];
     this.visit.testStationType = testStation.testStationType;
-    this.visit.testerId = this.authService.testerDetails.testerId;
-    this.visit.testerName = this.authService.testerDetails.testerName;
-    this.visit.testerEmail = this.authService.testerDetails.testerEmail;
+    this.visit.testerId = this.authenticationService.tokenInfo.testerId;
+    this.visit.testerName = this.authenticationService.tokenInfo.testerName;
+    this.visit.testerEmail = this.authenticationService.tokenInfo.testerEmail;
     this.visit.tests = [];
     if (id) this.visit.id = id;
     this.updateVisit();
@@ -51,9 +51,9 @@ export class VisitService {
       testStationPNumber: testStation.testStationPNumber,
       testStationEmail: testStation.testStationEmails[0],
       testStationType: testStation.testStationType,
-      testerName: this.authService.testerDetails.testerName,
-      testerStaffId: this.authService.testerDetails.testerId,
-      testerEmail: this.authService.testerDetails.testerEmail
+      testerName: this.authenticationService.tokenInfo.testerName,
+      testerStaffId: this.authenticationService.tokenInfo.testerId,
+      testerEmail: this.authenticationService.tokenInfo.testerEmail
     };
     return this.httpService.startVisit(activities);
   }
@@ -98,7 +98,9 @@ export class VisitService {
   }
 
   updateVisit() {
-    if (this.appService.caching) this.storageService.update(STORAGE.VISIT, this.visit);
+    if (this.appService.caching) {
+      this.storageService.update(STORAGE.VISIT, this.visit);
+    }
   }
 
   /**
@@ -110,7 +112,7 @@ export class VisitService {
       title: APP_STRINGS.SITE_VISIT_CLOSED_TITLE,
       message: APP_STRINGS.SITE_VISIT_CLOSED_MESSAGE,
       buttons: [APP_STRINGS.OK],
-      enableBackdropDismiss: false,
+      enableBackdropDismiss: false
     });
     clearingDataAlert.onDidDismiss(async () => {
       await this.setRootPage();

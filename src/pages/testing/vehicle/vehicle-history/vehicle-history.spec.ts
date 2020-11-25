@@ -1,5 +1,5 @@
 import { VehicleHistoryPage } from './vehicle-history';
-import { async, ComponentFixture, inject, TestBed } from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { IonicModule, NavController, NavParams, ViewController } from 'ionic-angular';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { ViewControllerMock } from '../../../../../test-config/ionic-mocks/view-controller.mock';
@@ -9,11 +9,11 @@ import { VehicleDataMock } from '../../../../assets/data-mocks/vehicle-data.mock
 import { PipesModule } from '../../../../pipes/pipes.module';
 import { TestResultsHistoryDataMock } from '../../../../assets/data-mocks/test-results-history-data.mock';
 import { TestTypeArrayDataMock } from '../../../../assets/data-mocks/test-type-array-data.mock';
-import { APP_STRINGS, TECH_RECORD_STATUS, VEHICLE_TYPE } from '../../../../app/app.enums';
+import { TECH_RECORD_STATUS, VEHICLE_TYPE } from '../../../../app/app.enums';
 import { By } from '@angular/platform-browser';
 import { VehicleModel } from '../../../../models/vehicle/vehicle.model';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
 
 describe('Component: VehicleHistoryPage', () => {
   let comp: VehicleHistoryPage;
@@ -21,7 +21,7 @@ describe('Component: VehicleHistoryPage', () => {
   let navCtrl: NavController;
   let navParams: NavParams;
   let commonFunctionsService: any;
-  let firebaseLogsService: FirebaseLogsService;
+  // let firebaseLogsService: FirebaseLogsService;
 
   let testResultsHistory: any = TestResultsHistoryDataMock.TestResultHistoryData;
   let vehicleData: VehicleModel = VehicleDataMock.VehicleData;
@@ -35,8 +35,8 @@ describe('Component: VehicleHistoryPage', () => {
         NavController,
         CommonFunctionsService,
         { provide: NavParams, useClass: NavParamsMock },
-        { provide: ViewController, useClass: ViewControllerMock },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock }
+        { provide: ViewController, useClass: ViewControllerMock }
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     });
@@ -48,7 +48,7 @@ describe('Component: VehicleHistoryPage', () => {
     navCtrl = TestBed.get(NavController);
     navParams = TestBed.get(NavParams);
     commonFunctionsService = TestBed.get(CommonFunctionsService);
-    firebaseLogsService = TestBed.get(FirebaseLogsService);
+    // firebaseLogsService = TestBed.get(FirebaseLogsService);
   });
 
   beforeEach(() => {
@@ -82,9 +82,9 @@ describe('Component: VehicleHistoryPage', () => {
   });
 
   it('should test ionViewDidEnterLogic', () => {
-    spyOn(firebaseLogsService, 'setScreenName');
-    comp.ionViewDidEnter();
-    expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
+    // spyOn(firebaseLogsService, 'setScreenName');
+    // comp.ionViewDidEnter();
+    // expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
   });
 
   it('should create an array called testTypeArray if testHistory exists', () => {

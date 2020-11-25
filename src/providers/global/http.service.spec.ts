@@ -2,11 +2,12 @@ import { TestBed, async, tick, fakeAsync } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Data } from '@angular/router';
+
 import { HTTPService } from './http.service';
 import { ActivityModel } from '../../models/visit/activity.model';
 import { ActivityDataModelMock } from '../../assets/data-mocks/data-model/activity-data-model.mock';
 import { ActivityDataMock } from '../../assets/data-mocks/activity.data.mock';
-import { AppConfig } from '../../../config/app.config';
+import { default as AppConfig } from '../../../config/application.hybrid';
 
 describe(`Provider: HttpService`, () => {
   let httpClient: HttpClient;
@@ -148,7 +149,7 @@ describe(`Provider: HttpService`, () => {
     httpService.getTechRecords(searchIdentifier, 'all').subscribe();
 
     const testRequest = httpMock.expectOne(
-      `${AppConfig.BACKEND_URL_TECHRECORDS}/${encodeURIComponent(
+      `${AppConfig.app.BACKEND_URL_TECHRECORDS}/${encodeURIComponent(
         searchIdentifier
       )}/tech-records?status=provisional_over_current&searchCriteria=all`
     );
@@ -169,7 +170,7 @@ describe(`Provider: HttpService`, () => {
       }
     );
 
-    const testRequest = httpMock.expectOne(`${AppConfig.BACKEND_URL_VISIT}/open?testerStaffId=${testerStaffId}`);
+    const testRequest = httpMock.expectOne(`${AppConfig.app.BACKEND_URL_VISIT}/open?testerStaffId=${testerStaffId}`);
     expect(testRequest.request.method).toEqual('GET');
 
     setTimeout(function() {
@@ -192,7 +193,7 @@ describe(`Provider: HttpService`, () => {
       }
     );
 
-    const testRequest = httpMock.expectOne(`${AppConfig.BACKEND_URL_VISIT}/open?testerStaffId=${testerStaffId}`);
+    const testRequest = httpMock.expectOne(`${AppConfig.app.BACKEND_URL_VISIT}/open?testerStaffId=${testerStaffId}`);
     expect(testRequest.request.method).toEqual('GET');
 
     setTimeout(function() {

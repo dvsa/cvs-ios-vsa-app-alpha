@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { AppConfig } from '../../../config/app.config';
-import { LOCAL_STORAGE, STORAGE } from '../../app/app.enums';
 import { Platform, ToastController } from 'ionic-angular';
+
+import { default as AppConfig } from '../../../config/application.hybrid';
+import { LOCAL_STORAGE, STORAGE } from '../../app/app.enums';
 import { StorageService } from '../natives/storage.service';
-import { AuthService } from './auth.service';
 
 @Injectable()
 export class AppService {
@@ -11,7 +11,6 @@ export class AppService {
   public readonly isCordova: boolean;
   public readonly isInitRunDone: boolean;
   public isSignatureRegistered: boolean;
-  public isJwtTokenStored: boolean;
   public easterEgg: boolean;
   public caching: boolean;
   count: number = 0;
@@ -22,8 +21,7 @@ export class AppService {
   constructor(
     private platform: Platform,
     private toastController: ToastController,
-    private storageService: StorageService,
-    private authService: AuthService
+    private storageService: StorageService
   ) {
     this.isCordova = this.platform.is('cordova');
     this.isProduction = AppConfig.IS_PRODUCTION == 'true';
@@ -42,7 +40,6 @@ export class AppService {
     this.isSignatureRegistered = !!localStorage.getItem(LOCAL_STORAGE.SIGNATURE);
     this.caching = !!localStorage.getItem(LOCAL_STORAGE.CACHING);
     this.easterEgg = !!localStorage.getItem(LOCAL_STORAGE.EASTER_EGG);
-    this.isJwtTokenStored = !!localStorage.getItem(LOCAL_STORAGE.JWT_TOKEN);
   }
 
   manageAppInit(): Promise<any> {
@@ -52,11 +49,7 @@ export class AppService {
         this.setFlags();
         return Promise.resolve();
       } else {
-        let arr = [
-          this.authService.resetTokenCache(),
-          this.storageService.clearStorage(),
-          this.clearLocalStorage()
-        ];
+        let arr = [this.storageService.clearStorage(), this.clearLocalStorage()];
 
         return Promise.all(arr).then(() => {
           localStorage.setItem(LOCAL_STORAGE.FIRST_INIT, 'done');

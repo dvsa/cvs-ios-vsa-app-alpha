@@ -6,16 +6,16 @@ import { HTTPService } from '../global/http.service';
 import { CommonFunctionsService } from '../utils/common-functions';
 import { TestTypeService } from '../test-type/test-type.service';
 import { TestTypeServiceMock } from '../../../test-config/services-mocks/test-type-service.mock';
-import { AuthService } from '../global/auth.service';
-import { AuthServiceMock } from '../../../test-config/services-mocks/auth-service.mock';
 import { TestTypeDataModelMock } from '../../assets/data-mocks/data-model/test-type-data-model.mock';
 import { DefectDetailsDataMock } from '../../assets/data-mocks/defect-details-data.mock';
 import { TEST_TYPES_IDS, SPEC_VALUES, VEHICLE_TYPE } from '../../app/app.enums';
 import { SpecialistCustomDefectModel } from '../../models/defects/defect-details.model';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
+import { AuthenticationServiceMock } from '../../../test-config/services-mocks/authentication-service.mock';
 
 describe('Provider: TestResultService', () => {
   let testResultService: TestResultService;
-  let authService: AuthService;
+  let authenticationService: AuthenticationService;
   let httpService: HTTPService;
   let httpServiceSpy: any;
 
@@ -36,13 +36,13 @@ describe('Provider: TestResultService', () => {
       providers: [
         TestResultService,
         CommonFunctionsService,
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: TestTypeService, useClass: TestTypeServiceMock },
         { provide: HTTPService, useValue: httpServiceSpy }
       ]
     });
 
-    authService = TestBed.get(AuthService);
+    authenticationService = TestBed.get(AuthenticationService);
     testResultService = TestBed.get(TestResultService);
     httpService = TestBed.get(HTTPService);
   });
@@ -50,7 +50,7 @@ describe('Provider: TestResultService', () => {
   afterEach(() => {
     testResultService = null;
     httpService = null;
-    authService = null;
+    authenticationService = null;
   });
 
   it('should create a test result', () => {

@@ -23,18 +23,18 @@ import { StorageServiceMock } from '../../../../../test-config/services-mocks/st
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { VehicleService } from '../../../../providers/vehicle/vehicle.service';
 import { VehicleServiceMock } from '../../../../../test-config/services-mocks/vehicle-service.mock';
-import { Firebase } from '@ionic-native/firebase';
 import { CallNumber } from '@ionic-native/call-number';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestDataModelMock } from '../../../../assets/data-mocks/data-model/test-data-model.mock';
 import { VehicleDataMock } from '../../../../assets/data-mocks/vehicle-data.mock';
 import { APP_STRINGS, STORAGE, VEHICLE_TYPE } from '../../../../app/app.enums';
-import { AuthService } from '../../../../providers/global/auth.service';
-import { AuthServiceMock } from '../../../../../test-config/services-mocks/auth-service.mock';
+import { AuthenticationService } from '../../../../providers/auth/authentication/authentication.service';
+import { AuthenticationServiceMock } from './../../../../../test-config/services-mocks/authentication-service.mock';
 import { Store } from '@ngrx/store';
-import { TestStore } from '../../../../providers/interceptors/auth.interceptor.spec';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+import { TestStore } from '../../../../modules/logs/data-store.service.mock';
+// import { Firebase } from '@ionic-native/firebase';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { AppService } from '../../../../providers/global/app.service';
 import { AppServiceMock } from '../../../../../test-config/services-mocks/app-service.mock';
 import { VehicleLookupSearchCriteriaData } from '../../../../assets/app-data/vehicle-lookup-search-criteria/vehicle-lookup-search-criteria.data';
@@ -50,7 +50,7 @@ describe('Component: VehicleLookupPage', () => {
   let fixture: ComponentFixture<VehicleLookupPage>;
   let openNativeSettingsSpy: any;
   let storageService: StorageServiceMock;
-  let firebaseLogsService: FirebaseLogsService;
+  // let firebaseLogsService: FirebaseLogsService;
   let modalCtrl: ModalController;
   let vehicleService: VehicleService;
   let logProvider: LogsProvider;
@@ -72,19 +72,19 @@ describe('Component: VehicleLookupPage', () => {
       declarations: [VehicleLookupPage],
       imports: [IonicModule.forRoot(VehicleLookupPage)],
       providers: [
-        Firebase,
+        // Firebase,
         CallNumber,
         { provide: NavController, useFactory: () => NavControllerMock.instance() },
         { provide: NavParams, useClass: NavParamsMock },
         { provide: VisitService, useClass: VisitServiceMock },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: AlertController, useFactory: () => AlertControllerMock.instance() },
         { provide: LoadingController, useFactory: () => LoadingControllerMock.instance(loading) },
         { provide: ModalController, useFactory: () => ModalControllerMock.instance() },
         { provide: StorageService, useClass: StorageServiceMock },
         { provide: OpenNativeSettings, useValue: openNativeSettingsSpy },
         { provide: VehicleService, useClass: VehicleServiceMock },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: Store, useClass: TestStore },
         { provide: AppService, useClass: AppServiceMock },
         { provide: ActivityService, useClass: ActivityServiceMock },
@@ -98,7 +98,7 @@ describe('Component: VehicleLookupPage', () => {
     fixture = TestBed.createComponent(VehicleLookupPage);
     component = fixture.componentInstance;
     storageService = TestBed.get(StorageService);
-    firebaseLogsService = TestBed.get(FirebaseLogsService);
+    // firebaseLogsService = TestBed.get(FirebaseLogsService);
     modalCtrl = TestBed.get(ModalController);
     vehicleService = TestBed.get(VehicleService);
     logProvider = TestBed.get(LogsProvider);
@@ -119,9 +119,9 @@ describe('Component: VehicleLookupPage', () => {
   });
 
   it('should test ionViewDidEnterLogic', () => {
-    spyOn(firebaseLogsService, 'setScreenName');
-    component.ionViewDidEnter();
-    expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
+    // spyOn(firebaseLogsService, 'setScreenName');
+    // component.ionViewDidEnter();
+    // expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
   });
 
   it('should test ionViewWillEnter lifecycle hook', () => {

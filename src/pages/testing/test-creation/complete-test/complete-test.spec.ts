@@ -38,8 +38,8 @@ import { of } from 'rxjs/observable/of';
 import { TestTypeServiceMock } from '../../../../../test-config/services-mocks/test-type-service.mock';
 import { DefectCategoryReferenceDataModel } from '../../../../models/reference-data-models/defects.reference-model';
 import { VehicleTechRecordModel } from '../../../../models/vehicle/tech-record.model';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { DefectDetailsDataMock } from '../../../../assets/data-mocks/defect-details-data.mock';
 import { ActionSheetControllerMock, ModalControllerMock, ViewControllerMock } from 'ionic-mocks';
 
@@ -104,7 +104,7 @@ describe('Component: CompleteTestPage', () => {
       providers: [
         NavController,
         ChangeDetectorRef,
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: NavParams, useClass: NavParamsMock },
         { provide: VisitService, useClass: VisitServiceMock },
         { provide: TestTypeService, useClass: TestTypeServiceMock },
@@ -116,8 +116,8 @@ describe('Component: CompleteTestPage', () => {
         { provide: ModalController, useFactory: () => ModalControllerMock.instance() },
         { provide: VehicleService, useClass: VehicleServiceMock },
         { provide: DefectsService, useValue: defectsServiceSpy },
-        { provide: ViewController, useFactory: () => ViewControllerMock.instance() },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock }
+        { provide: ViewController, useFactory: () => ViewControllerMock.instance() }
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
     }).compileComponents();

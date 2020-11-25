@@ -1,20 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HTTPService } from './http.service';
-import { catchError, map, retryWhen } from 'rxjs/operators';
-import { genericRetryStrategy } from '../utils/rxjs.utils';
-import { TestStationReferenceDataModel } from '../../models/reference-data-models/test-station.model';
-import { APP_STRINGS, APP_UPDATE, STORAGE } from '../../app/app.enums';
-import { StorageService } from '../natives/storage.service';
+import { catchError, map } from 'rxjs/operators';
 import { AlertController, Events, LoadingController } from 'ionic-angular';
 import { _throw } from 'rxjs/observable/throw';
 import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { CallNumber } from '@ionic-native/call-number';
 import { Observable } from 'rxjs';
-import { AppConfig } from '../../../config/app.config';
-import { AppService } from './app.service';
-import { Firebase } from '@ionic-native/firebase';
-import { AuthService } from './auth.service';
+// import { Firebase } from '@ionic-native/firebase';
 import { AppVersion } from '@ionic-native/app-version';
+
+import { TestStationReferenceDataModel } from '../../models/reference-data-models/test-station.model';
+import { APP_STRINGS, APP_UPDATE, STORAGE } from '../../app/app.enums';
+import { StorageService } from '../natives/storage.service';
+import { default as AppConfig } from '../../../config/application.hybrid';
+import { AppService } from './app.service';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
 import { AppVersionModel } from '../../models/latest-version.model';
 import { LogsProvider } from '../../modules/logs/logs.service';
 import { VERSION_POPUP_MSG } from '../../app/app.constants';
@@ -39,14 +39,16 @@ export class SyncService {
     private alertCtrl: AlertController,
     private openNativeSettings: OpenNativeSettings,
     private callNumber: CallNumber,
-    private firebase: Firebase,
-    public authService: AuthService,
+    // private firebase: Firebase,
+    private authenticationService: AuthenticationService,
     private appVersion: AppVersion,
     private logProvider: LogsProvider
   ) {}
 
   public async startSync(): Promise<any[]> {
-    this.checkForUpdate();
+    if (this.appService.isCordova) {
+      this.checkForUpdate();
+    }
 
     if (!this.appService.getRefDataSync()) {
       this.loading.present();
@@ -82,9 +84,9 @@ export class SyncService {
 
       this.logProvider.dispatchLog({
         type: `error - checkForUpdate in sync.service.ts`,
-        message: `User ${this.authService.getOid()} - Cannot perform check if app update is required - ${JSON.stringify(
-          error
-        )}`,
+        message: `User ${
+          this.authenticationService.tokenInfo.testerId
+        } - Cannot perform check if app update is required - ${JSON.stringify(error)}`,
         timestamp: Date.now()
       });
     }
@@ -120,13 +122,13 @@ export class SyncService {
   }
 
   getDataFromMicroservice(microservice): Observable<TestStationReferenceDataModel[]> {
-    this.oid = this.authService.getOid();
+    this.oid = this.authenticationService.tokenInfo.testerId;
+
     return this.httpService['get' + microservice]().pipe(
       map((data: any) => {
         this.storageService.update(STORAGE[microservice.toUpperCase()], data.body);
         return data.body;
       }),
-      retryWhen(genericRetryStrategy()),
       catchError((error) => {
         this.logProvider.dispatchLog({
           type: `error-${microservice}-getDataFromMicroservice in sync.service.ts`,
@@ -135,10 +137,10 @@ export class SyncService {
           timestamp: Date.now()
         });
 
-        this.firebase.logEvent('test_error', {
-          content_type: 'error',
-          item_id: `Error at ${microservice} microservice`
-        });
+        // this.firebase.logEvent('test_error', {
+        //   content_type: 'error',
+        //   item_id: `Error at ${microservice} microservice`
+        // });
 
         return _throw(error);
       })
@@ -161,7 +163,7 @@ export class SyncService {
         {
           text: 'Call Technical Support',
           handler: () => {
-            this.callNumber.callNumber(AppConfig.KEY_PHONE_NUMBER, true).then(
+            this.callNumber.callNumber(AppConfig.app.KEY_PHONE_NUMBER, true).then(
               (data) => console.log(data),
               (err) => console.log(err)
             );

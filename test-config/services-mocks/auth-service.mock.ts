@@ -1,19 +1,20 @@
- import { TesterDetailsModel } from "../../src/models/tester-details.model";
-import { AuthenticationResult } from "@ionic-native/ms-adal";
-import { Observable } from "rxjs";
-import { LOCAL_STORAGE } from "../../src/app/app.enums";
-import { ErrorObservable } from "rxjs/observable/ErrorObservable";
-import { CommonFunctionsService } from "../../src/providers/utils/common-functions";
+import { TesterDetailsModel } from '../../src/models/tester-details.model';
+// import { AuthenticationResult } from "@ionic-native/ms-adal";
+import { Observable } from 'rxjs';
+import { LOCAL_STORAGE } from '../../src/app/app.enums';
+import { ErrorObservable } from 'rxjs/observable/ErrorObservable';
+import { CommonFunctionsService } from '../../src/providers/utils/common-functions';
 
 export class AuthServiceMock {
   testerDetails: TesterDetailsModel;
-  jwtToken: string = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvaWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidXBuIjoidGVzdEBlbWFpbC5jb20iLCJyb2xlcyI6WyJDVlNGdWxsQWNjZXNzIl0sInRpZCI6IjEyMzQ1Njc4OTAifQ.WiuTyp6cSXYb7L94JbjDy3F9Tt_qvrj9MWZq4xvEi6E';
+  jwtToken: string =
+    'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJvaWQiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwidXBuIjoidGVzdEBlbWFpbC5jb20iLCJyb2xlcyI6WyJDVlNGdWxsQWNjZXNzIl0sInRpZCI6IjEyMzQ1Njc4OTAifQ.WiuTyp6cSXYb7L94JbjDy3F9Tt_qvrj9MWZq4xvEi6E';
   decodedToken = {
-    "oid": "1234567890",
-    "name": "John Doe",
-    "upn": "test@email.com",
-    "roles": ["CVSFullAccess"],
-    "tid": "1234567890"
+    oid: '1234567890',
+    name: 'John Doe',
+    upn: 'test@email.com',
+    roles: ['CVSFullAccess'],
+    tid: '1234567890'
   };
   userRoles: string[] = [];
   tenantId: string;
@@ -51,7 +52,7 @@ export class AuthServiceMock {
   }
 
   getJWTToken() {
-    return this.jwtToken
+    return this.jwtToken;
   }
 
   getOid() {
@@ -62,7 +63,7 @@ export class AuthServiceMock {
     return !isError;
   }
 
-  setTesterDetails(authResponse: AuthenticationResult): TesterDetailsModel {
+  setTesterDetails(authResponse: any): TesterDetailsModel {
     let commonFunc = new CommonFunctionsService();
 
     let details: TesterDetailsModel = {
@@ -71,7 +72,7 @@ export class AuthServiceMock {
       testerEmail: '',
       testerRoles: ['CVSFullAccess']
     };
-    details.testerEmail = `${details.testerName}.${details.testerId}@email.com`
+    details.testerEmail = `${details.testerName}.${details.testerId}@email.com`;
 
     if (authResponse) {
       let decodedToken = this.decodeJWT(authResponse.accessToken);
@@ -82,7 +83,7 @@ export class AuthServiceMock {
     }
     this.userRoles = details.testerRoles;
     localStorage.setItem('tester-details', JSON.stringify(details));
-    return details
+    return details;
   }
 
   private decodeJWT(token) {
@@ -90,6 +91,6 @@ export class AuthServiceMock {
   }
 
   hasRights(userRoles: string[], neededRoles: string[]): boolean {
-    return userRoles.some(role => neededRoles.indexOf(role) >= 0);
+    return userRoles.some((role) => neededRoles.indexOf(role) >= 0);
   }
 }

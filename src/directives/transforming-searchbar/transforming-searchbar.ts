@@ -17,7 +17,7 @@ export class TransformingSearchBarDirective implements AfterViewInit, OnDestroy 
     private renderer: Renderer2,
     public events: Events
   ) {
-    this.headerElemRef = el.nativeElement;
+    this.headerElemRef = this.el.nativeElement;
   }
 
   ngAfterViewInit() {

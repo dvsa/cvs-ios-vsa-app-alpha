@@ -4,10 +4,9 @@ import { STORAGE, VISIT } from '../../app/app.enums';
 import { AppService } from '../global/app.service';
 import { VisitModel } from '../../models/visit/visit.model';
 import { ActivityModel } from '../../models/visit/activity.model';
-import { AuthService } from '../global/auth.service';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
 import { HTTPService } from '../global/http.service';
 import { TestResultModel } from '../../models/tests/test-result.model';
-import Timer = NodeJS.Timer;
 import { Observable } from 'rxjs';
 import { HttpResponse } from '@angular/common/http';
 
@@ -21,7 +20,7 @@ export class ActivityService {
   constructor(
     private storageService: StorageService,
     private appService: AppService,
-    private authService: AuthService,
+    private authenticationService: AuthenticationService,
     private httpService: HTTPService
   ) {}
 
@@ -37,8 +36,8 @@ export class ActivityService {
       testStationPNumber: visit.testStationPNumber,
       testStationEmail: visit.testStationEmail,
       testStationType: visit.testStationType,
-      testerName: this.authService.testerDetails.testerName,
-      testerStaffId: this.authService.testerDetails.testerId,
+      testerName: this.authenticationService.tokenInfo.testerName,
+      testerStaffId: this.authenticationService.tokenInfo.testerId,
       startTime: null,
       endTime: null,
       waitReason: [],
@@ -59,7 +58,7 @@ export class ActivityService {
   }
 
   isVisitStillOpen(): Observable<HttpResponse<boolean>> {
-    return this.httpService.getOpenVisitCheck(this.authService.testerDetails.testerId);
+    return this.httpService.getOpenVisitCheck(this.authenticationService.tokenInfo.testerId);
   }
 
   /**

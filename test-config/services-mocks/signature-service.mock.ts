@@ -1,13 +1,12 @@
-import { Observable } from "rxjs";
-import { NavController } from "ionic-angular";
-import { of } from "rxjs/observable/of";
+import { Observable } from 'rxjs';
+import { NavController } from 'ionic-angular';
+import { of } from 'rxjs/observable/of';
 
 export class SignatureServiceMock {
   signatureString: string;
   isError: boolean;
 
-  constructor() {
-  }
+  constructor() {}
 
   saveSignature(): Observable<any> {
     if (this.isError) {

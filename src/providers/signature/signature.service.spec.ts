@@ -1,14 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { Events, ToastController, Platform } from 'ionic-angular';
 import { SignatureService } from './signature.service';
+import { ToastControllerMock, PlatformMock } from 'ionic-mocks';
+
 import { StorageService } from '../natives/storage.service';
 import { HTTPService } from '../global/http.service';
-import { AuthService } from '../global/auth.service';
-import { AuthServiceMock } from '../../../test-config/services-mocks/auth-service.mock';
-import { AppService } from '../global/app.service';
-import { AppServiceMock } from '../../../test-config/services-mocks/app-service.mock';
-import { Events, ToastController } from 'ionic-angular';
-import { APP_STRINGS, SIGNATURE_STATUS } from '../../app/app.enums';
-import { ToastControllerMock } from 'ionic-mocks';
+import { AuthenticationService } from '../auth';
+import { SIGNATURE_STATUS } from '../../app/app.enums';
 
 describe('SignatureService', () => {
   let signatureService: SignatureService;
@@ -16,8 +14,8 @@ describe('SignatureService', () => {
   let storageServiceSpy: any;
   let httpService: HTTPService;
   let httpServiceSpy;
-  let appService: AppService;
-  let authService: AuthService;
+  let authenticationService: AuthenticationService;
+  let authenticationSpy: any;
   let eventsSpy: any;
   let events: Events;
   let toastCtrl: ToastController;
@@ -26,34 +24,27 @@ describe('SignatureService', () => {
     storageServiceSpy = jasmine.createSpyObj('StorageService', ['create']);
     httpServiceSpy = jasmine.createSpyObj('HTTPService', ['saveSignature']);
     eventsSpy = jasmine.createSpyObj('Events', ['unsubscribe']);
+    authenticationSpy = jasmine.createSpyObj('authenticationService', ['tokenInfo']);
 
     TestBed.configureTestingModule({
       imports: [],
       providers: [
         SignatureService,
         { provide: Events, useValue: eventsSpy },
+        { provide: Platform, useFactory: () => PlatformMock.instance() },
         { provide: ToastController, useFactory: () => ToastControllerMock.instance() },
-        { provide: AppService, useClass: AppServiceMock },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useValue: authenticationSpy },
         { provide: StorageService, useValue: storageServiceSpy },
         { provide: HTTPService, useValue: httpServiceSpy }
       ]
     });
+
     signatureService = TestBed.get(SignatureService);
     storageService = TestBed.get(StorageService);
     httpService = TestBed.get(HTTPService);
-    appService = TestBed.get(AppService);
-    authService = TestBed.get(AuthService);
+    authenticationService = TestBed.get(AuthenticationService);
     events = TestBed.get(Events);
     toastCtrl = TestBed.get(ToastController);
-  });
-
-  afterEach(() => {
-    signatureService = null;
-    storageService = null;
-    httpService = null;
-    appService = null;
-    authService = null;
   });
 
   it('should check if saveSignature haveBeenCalled', () => {

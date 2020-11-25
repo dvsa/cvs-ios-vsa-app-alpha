@@ -2,10 +2,9 @@ import { Injectable } from '@angular/core';
 import { HTTPService } from '../global/http.service';
 import { Observable } from 'rxjs';
 import { Events, ToastController } from 'ionic-angular';
-import { AuthService } from '../global/auth.service';
-import { AppService } from '../global/app.service';
 import { StorageService } from '../natives/storage.service';
 import { APP_STRINGS, SIGNATURE_STATUS, STORAGE } from '../../app/app.enums';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
 
 @Injectable()
 export class SignatureService {
@@ -19,16 +18,15 @@ export class SignatureService {
 
   constructor(
     private httpService: HTTPService,
-    private appService: AppService,
     private events: Events,
     private toastCtrl: ToastController,
     private storageService: StorageService,
-    private authService: AuthService
+    private authenticationService: AuthenticationService
   ) {}
 
   saveSignature(): Observable<any> {
     return this.httpService.saveSignature(
-      this.authService.testerDetails.testerId,
+      this.authenticationService.tokenInfo.testerId,
       this.signatureString.slice(22, this.signatureString.length)
     );
   }

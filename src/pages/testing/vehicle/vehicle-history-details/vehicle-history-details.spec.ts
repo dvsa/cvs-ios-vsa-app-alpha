@@ -8,8 +8,8 @@ import { CommonFunctionsService } from '../../../../providers/utils/common-funct
 import { PipesModule } from '../../../../pipes/pipes.module';
 import { TestResultModel } from '../../../../models/tests/test-result.model';
 import { TestResultsHistoryDataMock } from '../../../../assets/data-mocks/test-results-history-data.mock';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { AppService } from '../../../../providers/global/app.service';
 import { AppServiceMock } from '../../../../../test-config/services-mocks/app-service.mock';
 import { TestTypeService } from '../../../../providers/test-type/test-type.service';
@@ -23,7 +23,7 @@ describe('Component: VehicleHistoryDetailsPage', () => {
   let fixture: ComponentFixture<VehicleHistoryDetailsPage>;
   let navCtrl: NavController;
   let commonFunctionsService: CommonFunctionsService;
-  let firebaseLogsService: FirebaseLogsService;
+  // let firebaseLogsService: FirebaseLogsService;
   let viewCtrl: ViewController;
 
   const defects: DefectDetailsModel[] = [MOCK_UTILS.mockDefectsDetails()];
@@ -38,7 +38,7 @@ describe('Component: VehicleHistoryDetailsPage', () => {
         { provide: NavParams, useClass: NavParamsMock },
         { provide: ViewController, useClass: ViewControllerMock },
         { provide: TestTypeService, useClass: TestTypeServiceMock },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: AppService, useClass: AppServiceMock }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -51,7 +51,7 @@ describe('Component: VehicleHistoryDetailsPage', () => {
     navCtrl = TestBed.get(NavController);
     viewCtrl = TestBed.get(ViewController);
     commonFunctionsService = TestBed.get(CommonFunctionsService);
-    firebaseLogsService = TestBed.get(FirebaseLogsService);
+    // firebaseLogsService = TestBed.get(FirebaseLogsService);
     comp.testIndex = 0;
     comp.testTypeIndex = 0;
     comp.testResultHistory = TestResultsHistoryDataMock.TestResultHistoryData;
@@ -72,9 +72,9 @@ describe('Component: VehicleHistoryDetailsPage', () => {
   });
 
   it('should test ionViewDidEnterLogic', () => {
-    spyOn(firebaseLogsService, 'setScreenName');
-    comp.ionViewDidEnter();
-    expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
+    // spyOn(firebaseLogsService, 'setScreenName');
+    // comp.ionViewDidEnter();
+    // expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
   });
 
   it('should return the correct color', () => {

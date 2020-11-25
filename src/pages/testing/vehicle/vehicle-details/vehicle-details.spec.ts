@@ -19,8 +19,8 @@ import { VehicleTechRecordModel } from '../../../../models/vehicle/tech-record.m
 import { TechRecordDataMock } from '../../../../assets/data-mocks/tech-record-data.mock';
 import { TestTypeArrayDataMock } from '../../../../assets/data-mocks/test-type-array-data.mock';
 import { PipesModule } from '../../../../pipes/pipes.module';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { APP_STRINGS, PAGE_NAMES, TECH_RECORD_STATUS } from '../../../../app/app.enums';
 import { By } from '@angular/platform-browser';
 import { VehicleModel } from '../../../../models/vehicle/vehicle.model';
@@ -34,7 +34,7 @@ describe('Component: VehicleDetailsPage', () => {
   let navParams: NavParams;
   let commonFunctionsService: CommonFunctionsService;
   let callNumberSpy: any;
-  let firebaseLogsService: FirebaseLogsService;
+  // let firebaseLogsService: FirebaseLogsService;
   let alertCtrl: AlertController;
   let viewController: ViewController;
 
@@ -55,7 +55,7 @@ describe('Component: VehicleDetailsPage', () => {
         { provide: AlertController, useFactory: () => AlertControllerMock.instance() },
         { provide: StorageService, useClass: StorageServiceMock },
         { provide: CallNumber, useValue: callNumberSpy },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: AppService, useClass: AppServiceMock }
       ],
       schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -73,7 +73,7 @@ describe('Component: VehicleDetailsPage', () => {
     });
     commonFunctionsService = TestBed.get(CommonFunctionsService);
     alertCtrl = TestBed.get(AlertController);
-    firebaseLogsService = TestBed.get(FirebaseLogsService);
+    // firebaseLogsService = TestBed.get(FirebaseLogsService);
     viewController = TestBed.get(ViewController);
 
     fixture = TestBed.createComponent(VehicleDetailsPage);
@@ -85,7 +85,7 @@ describe('Component: VehicleDetailsPage', () => {
     component = null;
     navParams = null;
     commonFunctionsService = null;
-    firebaseLogsService = null;
+    // firebaseLogsService = null;
     alertCtrl = null;
   });
 
@@ -95,9 +95,9 @@ describe('Component: VehicleDetailsPage', () => {
   });
 
   it('Should check if logEvent was called in ionViewDidEnter', () => {
-    spyOn(firebaseLogsService, 'logEvent');
-    component.ionViewDidEnter();
-    expect(firebaseLogsService.logEvent).toHaveBeenCalled();
+    // spyOn(firebaseLogsService, 'logEvent');
+    // component.ionViewDidEnter();
+    // expect(firebaseLogsService.logEvent).toHaveBeenCalled();
   });
 
   it('should check if alertCtrl was called', () => {
@@ -106,9 +106,9 @@ describe('Component: VehicleDetailsPage', () => {
   });
 
   it('should check if logEvent was called', () => {
-    spyOn(firebaseLogsService, 'logEvent');
-    component.loggingInAlertHandler();
-    expect(firebaseLogsService.logEvent).toHaveBeenCalled();
+    // spyOn(firebaseLogsService, 'logEvent');
+    // component.loggingInAlertHandler();
+    // expect(firebaseLogsService.logEvent).toHaveBeenCalled();
   });
 
   it('should not display the provisional label if the techRecord is current', () => {

@@ -7,6 +7,12 @@ import {
   NavController,
   NavParams
 } from 'ionic-angular';
+import { _throw } from 'rxjs/observable/throw';
+import { Observable, Observer } from 'rxjs';
+import { OpenNativeSettings } from '@ionic-native/open-native-settings';
+import { CallNumber } from '@ionic-native/call-number';
+// import { Firebase } from '@ionic-native/firebase';
+
 import { TestModel } from '../../../../models/tests/test.model';
 import { VehicleService } from '../../../../providers/vehicle/vehicle.service';
 import { VisitService } from '../../../../providers/visit/visit.service';
@@ -19,15 +25,10 @@ import {
   FIREBASE_SCREEN_NAMES
 } from '../../../../app/app.enums';
 import { StorageService } from '../../../../providers/natives/storage.service';
-import { Observable, Observer } from 'rxjs';
-import { AppConfig } from '../../../../../config/app.config';
-import { _throw } from 'rxjs/observable/throw';
-import { OpenNativeSettings } from '@ionic-native/open-native-settings';
-import { CallNumber } from '@ionic-native/call-number';
+import { default as AppConfig } from '../../../../../config/application.hybrid';
 import { VehicleModel } from '../../../../models/vehicle/vehicle.model';
-import { Firebase } from '@ionic-native/firebase';
-import { AuthService } from '../../../../providers/global/auth.service';
-import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
+import { AuthenticationService } from '../../../../providers/auth/authentication/authentication.service';
+// import { FirebaseLogsService } from '../../../../providers/firebase-logs/firebase-logs.service';
 import { AppService } from '../../../../providers/global/app.service';
 import { VehicleLookupSearchCriteriaData } from '../../../../assets/app-data/vehicle-lookup-search-criteria/vehicle-lookup-search-criteria.data';
 import { ActivityService } from '../../../../providers/activity/activity.service';
@@ -41,7 +42,6 @@ import { LogsProvider } from '../../../../modules/logs/logs.service';
 export class VehicleLookupPage {
   testData: TestModel;
   searchVal: string = '';
-  oid: string;
   title: string = '';
   searchPlaceholder = '';
   isCombinationTest: boolean = false;
@@ -56,10 +56,10 @@ export class VehicleLookupPage {
     public storageService: StorageService,
     private openNativeSettings: OpenNativeSettings,
     private vehicleService: VehicleService,
-    private firebase: Firebase,
-    private firebaseLogsService: FirebaseLogsService,
+    // private firebase: Firebase,
+    // private firebaseLogsService: FirebaseLogsService,
+    private authenticationService: AuthenticationService,
     private callNumber: CallNumber,
-    private authService: AuthService,
     public appService: AppService,
     private modalCtrl: ModalController,
     private activityService: ActivityService,
@@ -98,7 +98,7 @@ export class VehicleLookupPage {
   }
 
   ionViewDidEnter() {
-    this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.VEHICLE_SEARCH);
+    // this.firebaseLogsService.setScreenName(FIREBASE_SCREEN_NAMES.VEHICLE_SEARCH);
   }
 
   /**
@@ -109,7 +109,6 @@ export class VehicleLookupPage {
       content: 'Loading...'
     });
     LOADING.present();
-    this.oid = this.authService.getOid();
 
     this.activityService.isVisitStillOpen().subscribe(
       (response) => {
@@ -128,6 +127,8 @@ export class VehicleLookupPage {
   }
 
   searchVehicle(searchedValue: string, LOADING) {
+    const { testerId } = this.authenticationService.tokenInfo;
+
     this.vehicleService
       .getVehicleTechRecords(
         searchedValue.toUpperCase(),
@@ -143,14 +144,14 @@ export class VehicleLookupPage {
               this.logProvider.dispatchLog({
                 type:
                   'error-vehicleService.getTestResultsHistory-searchVehicle in vehicle-lookup.ts',
-                message: `${this.oid} - ${error.status} ${error.error} for API call to ${error.url}`,
+                message: `${testerId} - ${error.status} ${error.error} for API call to ${error.url}`,
                 timestamp: Date.now()
               });
 
-              this.firebase.logEvent('test_error', {
-                content_type: 'error',
-                item_id: 'Failed retrieving the testResultsHistory'
-              });
+              // this.firebase.logEvent('test_error', {
+              //   content_type: 'error',
+              //   item_id: 'Failed retrieving the testResultsHistory'
+              // });
               this.storageService.update(STORAGE.TEST_HISTORY + vehicleData[0].systemNumber, []);
               this.goToVehicleDetails(vehicleData[0]);
             },
@@ -178,17 +179,17 @@ export class VehicleLookupPage {
         (error) => {
           this.logProvider.dispatchLog({
             type: 'error-vehicleService.getTestResultsHistory-searchVehicle in vehicle-lookup.ts',
-            message: `${this.oid} - ${error.status} ${error.error} for API call to ${error.url}`,
+            message: `${testerId} - ${error.status} ${error.error} for API call to ${error.url}`,
             timestamp: Date.now()
           });
 
           this.searchVal = '';
           LOADING.dismiss();
           this.showAlert();
-          this.firebase.logEvent('test_error', {
-            content_type: 'error',
-            item_id: 'Failed retrieving the techRecord'
-          });
+          // this.firebase.logEvent('test_error', {
+          //   content_type: 'error',
+          //   item_id: 'Failed retrieving the techRecord'
+          // });
         }
       );
   }
@@ -208,7 +209,7 @@ export class VehicleLookupPage {
       buttons: ['OK']
     });
     alert.present();
-    this.firebase.logEvent('test_error', { content_type: 'error', item_id: 'Vehicle not found' });
+    // this.firebase.logEvent('test_error', { content_type: 'error', item_id: 'Vehicle not found' });
   }
 
   goToVehicleDetails(vehicleData: VehicleModel) {
@@ -241,7 +242,7 @@ export class VehicleLookupPage {
         {
           text: 'Call Technical Support',
           handler: () => {
-            this.callNumber.callNumber(AppConfig.KEY_PHONE_NUMBER, true).then(
+            this.callNumber.callNumber(AppConfig.app.KEY_PHONE_NUMBER, true).then(
               (data) => console.log(data),
               (err) => console.log(err)
             );

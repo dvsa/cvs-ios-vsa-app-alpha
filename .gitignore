@@ -40,3 +40,8 @@ UserInterfaceState.xcuserstate
 env
 *.env
 sentry.properties
+
+# config files
+config/**/*
+
+TESTS-PhantomJS_*

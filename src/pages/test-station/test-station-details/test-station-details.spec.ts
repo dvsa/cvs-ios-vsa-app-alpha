@@ -9,7 +9,7 @@ import {
   LoadingController
 } from 'ionic-angular';
 import { PipesModule } from '../../../pipes/pipes.module';
-import { Firebase } from '@ionic-native/firebase';
+// import { Firebase } from '@ionic-native/firebase';
 import {
   NavControllerMock,
   AlertControllerMock,
@@ -23,15 +23,15 @@ import { OpenNativeSettings } from '@ionic-native/open-native-settings';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { TestStationReferenceDataModel } from '../../../models/reference-data-models/test-station.model';
 import { NavParamsMock } from '../../../../test-config/ionic-mocks/nav-params.mock';
-import { AuthService } from '../../../providers/global/auth.service';
-import { AuthServiceMock } from '../../../../test-config/services-mocks/auth-service.mock';
 import { Store } from '@ngrx/store';
-import { TestStore } from '../../../providers/interceptors/auth.interceptor.spec';
-import { FirebaseLogsService } from '../../../providers/firebase-logs/firebase-logs.service';
-import { FirebaseLogsServiceMock } from '../../../../test-config/services-mocks/firebaseLogsService.mock';
+import { TestStore } from '../../../modules/logs/data-store.service.mock';
+// import { FirebaseLogsService } from '../../../providers/firebase-logs/firebase-logs.service';
+// import { FirebaseLogsServiceMock } from '../../../../test-config/services-mocks/firebaseLogsService.mock';
 import { AppService } from '../../../providers/global/app.service';
 import { AppServiceMock } from '../../../../test-config/services-mocks/app-service.mock';
 import { LogsProvider } from '../../../modules/logs/logs.service';
+import { AuthenticationService } from '../../../providers/auth';
+import { AuthenticationServiceMock } from '../../../../test-config/services-mocks/authentication-service.mock';
 
 describe('Component: TestStationDetailsPage', () => {
   let component: TestStationDetailsPage;
@@ -40,10 +40,10 @@ describe('Component: TestStationDetailsPage', () => {
   let openNativeSettingsSpy: any;
   let navParams: NavParams;
   let visitServiceMock: VisitServiceMock;
-  let firebase: Firebase;
+  // let firebase: Firebase;
   let firebaseSpy: any;
   let alertCtrl: AlertController;
-  let firebaseLogsService: FirebaseLogsService;
+  // let firebaseLogsService: FirebaseLogsService;
   let logProvider: LogsProvider;
   let logProviderSpy;
 
@@ -59,17 +59,17 @@ describe('Component: TestStationDetailsPage', () => {
       declarations: [TestStationDetailsPage],
       imports: [IonicModule.forRoot(TestStationDetailsPage), PipesModule],
       providers: [
-        { provide: Firebase, useValue: firebaseSpy },
+        // { provide: Firebase, useValue: firebaseSpy },
         { provide: NavController, useFactory: () => NavControllerMock.instance() },
         { provide: NavParams, useClass: NavParamsMock },
-        { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
+        // { provide: FirebaseLogsService, useClass: FirebaseLogsServiceMock },
         { provide: AlertController, useFactory: () => AlertControllerMock.instance() },
         { provide: ViewController, useFactory: () => ViewControllerMock.instance() },
         { provide: LoadingController, useFactory: () => LoadingControllerMock.instance() },
         { provide: CallNumber, useValue: callNumberSpy },
         { provide: VisitService, useClass: VisitServiceMock },
         { provide: OpenNativeSettings, useValue: openNativeSettingsSpy },
-        { provide: AuthService, useClass: AuthServiceMock },
+        { provide: AuthenticationService, useClass: AuthenticationServiceMock },
         { provide: Store, useClass: TestStore },
         { provide: AppService, useClass: AppServiceMock },
         { provide: LogsProvider, useValue: logProviderSpy }
@@ -83,9 +83,9 @@ describe('Component: TestStationDetailsPage', () => {
     component = fixture.componentInstance;
     navParams = TestBed.get(NavParams);
     visitServiceMock = TestBed.get(VisitService);
-    firebase = TestBed.get(Firebase);
+    // firebase = TestBed.get(Firebase);
     alertCtrl = TestBed.get(AlertController);
-    firebaseLogsService = TestBed.get(FirebaseLogsService);
+    // firebaseLogsService = TestBed.get(FirebaseLogsService);
     logProvider = TestBed.get(LogsProvider);
   });
 
@@ -108,7 +108,7 @@ describe('Component: TestStationDetailsPage', () => {
     fixture.destroy();
     component = null;
     navParams = null;
-    firebase = null;
+    // firebase = null;
   });
 
   it('should create component', () => {
@@ -117,15 +117,15 @@ describe('Component: TestStationDetailsPage', () => {
   });
 
   it('should test ionViewDidEnterLogic', () => {
-    spyOn(firebaseLogsService, 'setScreenName');
-    component.ionViewDidEnter();
-    expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
+    // spyOn(firebaseLogsService, 'setScreenName');
+    // component.ionViewDidEnter();
+    // expect(firebaseLogsService.setScreenName).toHaveBeenCalled();
   });
 
   it('should test confirmStartVisit', () => {
     visitServiceMock.isError = true;
     component.confirmStartVisit();
-    expect(firebase.logEvent).toHaveBeenCalled();
+    // expect(firebase.logEvent).toHaveBeenCalled();
     visitServiceMock.isError = false;
     component.confirmStartVisit();
     expect(component.isNextPageLoading).toBeFalsy();

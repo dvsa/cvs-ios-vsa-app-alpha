@@ -1,4 +1,4 @@
-import { FirebaseLogsService } from "../../src/providers/firebase-logs/firebase-logs.service";
+// import { FirebaseLogsService } from "../../src/providers/firebase-logs/firebase-logs.service";
 
 export class FirebaseLogsServiceMock {
   search_vehicle_time = {
@@ -37,8 +37,7 @@ export class FirebaseLogsServiceMock {
     add_test_type_time_taken: 0
   };
 
-  constructor() {
-  }
+  constructor() {}
 
   logEvent(eventName: string, paramName: string, paramValue: any): Promise<any> {
     return Promise.resolve(true);
@@ -48,7 +47,7 @@ export class FirebaseLogsServiceMock {
     return Promise.resolve(true);
   }
 
-  differenceInSeconds(start, end): number {
-    return FirebaseLogsService.prototype.differenceInSeconds(start, end);
+  differenceInSeconds(start, end): any {
+    // return FirebaseLogsService.prototype.differenceInSeconds(start, end);
   }
 }

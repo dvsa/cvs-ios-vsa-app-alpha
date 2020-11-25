@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import { TIR_CERTIFICATE_NUMBER_PREFIXES, VEHICLE_TYPE } from '../../app/app.enums';
 import { CommonFunctionsService } from '../utils/common-functions';
 import { TestTypeService } from '../test-type/test-type.service';
-import { AuthService } from '../global/auth.service';
+import { AuthenticationService } from '../auth/authentication/authentication.service';
 import { TestTypeModel } from '../../models/tests/test-type.model';
 import { FirstTestTypesData } from '../../assets/app-data/test-types-data/first-test-types.data';
 import { TirTestTypesData } from '../../assets/app-data/test-types-data/tir-test-types.data';
@@ -15,7 +15,7 @@ import { PsvAnnualTestsThatGenerateCertificateData } from '../../assets/app-data
 @Injectable()
 export class TestResultService {
   constructor(
-    public authService: AuthService,
+    private authenticationService: AuthenticationService,
     private httpService: HTTPService,
     private commFunc: CommonFunctionsService,
     private testTypeService: TestTypeService
@@ -29,9 +29,9 @@ export class TestResultService {
     newTestResult.testStationName = visit.testStationName;
     newTestResult.testStationPNumber = visit.testStationPNumber;
     newTestResult.testStationType = visit.testStationType;
-    newTestResult.testerName = this.authService.testerDetails.testerName;
-    newTestResult.testerStaffId = this.authService.testerDetails.testerId;
-    newTestResult.testerEmailAddress = this.authService.testerDetails.testerEmail;
+    newTestResult.testerName = this.authenticationService.tokenInfo.testerName;
+    newTestResult.testerStaffId = this.authenticationService.tokenInfo.testerId;
+    newTestResult.testerEmailAddress = this.authenticationService.tokenInfo.testerEmail;
     /* TEST */
     newTestResult.testStartTimestamp = test.startTime;
     newTestResult.testEndTimestamp = test.endTime;
