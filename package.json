@@ -28,7 +28,8 @@
     "e2e": "npm run e2e-update && npm run e2e-test",
     "e2e-test": "protractor ./test-config/protractor.conf.js",
     "e2e-update": "webdriver-manager update --standalone false --gecko false",
-    "audit-dep": "npm audit --audit-level=high --json | audit-filter --nsp-config=.nsprc --audit=-"
+    "audit:check": "npm audit --audit-level=high --json | audit-filter --nsp-config=.nsprc --audit=-",
+    "audit-dep": "npm audit"
   },
   "config": {
     "ionic_generate_source_map": "true"
@@ -71,9 +72,9 @@
     "audit-filter": "^0.5.0",
     "call-number": "^1.0.1",
     "cordova-ios": "^5.0.1",
-    "cordova-open-native-settings": "^1.5.2",
+    "cordova-open-native-settings": "^1.5.3",
     "cordova-plugin-advanced-http": "^1.11.1",
-    "cordova-plugin-app-version": "^0.1.9",
+    "cordova-plugin-app-version": "^0.1.12",
     "cordova-plugin-camera": "^4.1.0",
     "cordova-plugin-compat": "^1.2.0",
     "cordova-plugin-device": "^1.1.7",
@@ -108,7 +109,7 @@
   "devDependencies": {
     "@angular/cli": "^6.2.9",
     "@commitlint/cli": "^9.1.1",
-    "@commitlint/config-conventional": "^9.1.1",
+    "@commitlint/config-conventional": "^12.0.0",
     "@ionic/app-scripts": "^3.2.4",
     "@sentry/wizard": "^1.1.4",
     "@types/debug": "^4.1.5",
@@ -170,7 +171,9 @@
       "cordova-plugin-secure-storage": {},
       "cordova-plugin-app-version": {},
       "cordova-plugin-exit": {},
-      "sentry-cordova": {}
+      "sentry-cordova": {
+        "SENTRY_ANDROID_SDK_VERSION": "1+"
+      }
     },
     "platforms": [
       "ios"
